@@ -1,4 +1,9 @@
 const express = require("express");
+const routerApi =  require("./routes");
+
+const { faker } = require("@faker-js/faker");
+const randomName = faker.name.fullName();
+
 const app = express();
 const port = 3777;
 
@@ -10,33 +15,27 @@ app.get("/inicio", (req, res) =>{
   res.send("Inicio de Lab Clinico");
 });
 
-app.get("/examenes", (req, res) =>{
-  res.json([{
-    name: "Glucosa en orina",
-    price: 1000
-  },
-  {
-    name: "Identificacion de bacterias",
-    price: 1500
-  }]);
-});
+routerApi(app);
 
-app.get('/examenes/:id', (req, res) => {
-  const { id } = req.params;
-  res.json({
-    id,
-    name: "Glucosa en orina",
-    price: 1000
-  });
-});
+// app.get('/users', (req, res) => {
+//   const { limit, offset } = req.query;
+//   if(limit && offset){
+//     res.json({
+//       limit,
+//       offset
+//     })
+//   } else{
+//     res.send("No hay parametros")
+//   };
+// });
 
-app.get('/categories/:categoryId/examenes/:examenId', (req, res) => {
-  const { categoryId, examenId } = req.params;
-  res.json({
-      categoryId,
-      examenId
-  });
-});
+// app.get('/categories/:categoryId/examenes/:examenId', (req, res) => {
+//   const { categoryId, examenId } = req.params;
+//   res.json({
+//       categoryId,
+//       examenId
+//   });
+// });
 
 app.listen(port, () =>{
   console.log("My port: " + port);
