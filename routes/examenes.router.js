@@ -1,30 +1,19 @@
 const express = require("express");
-const { faker } = require("@faker-js/faker");
-const randomName = faker.name.fullName();
+
+const ExamenesService = require('./../services/examenes.service')
 
 const router = express.Router();
+const service =  new ExamenesService();
 
 router.get("/", (req, res) =>{
-  const examenes = []
-  const { size } = req.query;
-  const limit = size || 10;
-  for (let index = 0; index < 100; index++) {
-    examenes.push({
-      name: faker.commerce.product(),
-      price: parseInt(faker.commerce.price(), 10),
-      image: faker.image.imageUrl()
-    })
-  }
+  const examenes = service.find()
   res.json(examenes);
 });
 
 router.get('/:id', (req, res) => {
   const { id } = req.params;
-  res.json({
-    id,
-    name: "Glucosa en orina",
-    price: 1000
-  });
+  const examen = service.findOne(id);
+  res.json(examen);
 });
 
 router.post('/', (req, res) => {
