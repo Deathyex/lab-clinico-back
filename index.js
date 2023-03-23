@@ -7,6 +7,8 @@ const randomName = faker.name.fullName();
 const app = express();
 const port = 3777;
 
+app.use(express.json());
+
 app.get("/", (req, res) =>{
   res.send("Hola mi server en Express");
 });

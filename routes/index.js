@@ -1,7 +1,12 @@
+const express = require("express");
+
+
 const examenesRouter = require('./examenes.router');
 
 function routerApi(app){
-  app.use('/examenes', examenesRouter)
+  const router = express.Router();
+  app.use('/api/v1', router);
+  router.use('/examenes', examenesRouter);
 }
 
 module.exports = routerApi;

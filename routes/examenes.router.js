@@ -27,4 +27,30 @@ router.get('/:id', (req, res) => {
   });
 });
 
+router.post('/', (req, res) => {
+  const body = req.body;
+  res.json({
+    message: "Creado",
+    data: body
+  });
+});
+
+router.patch('/:id', (req, res) => {
+  const { id } = req.params;
+  const body = req.body;
+  res.json({
+    message: "Actualizado",
+    data: body,
+    id
+  });
+});
+
+router.delete('/:id', (req, res) => {
+  const { id } = req.params;
+  res.json({
+    message: "Elminiado",
+    id
+  });
+});
+
 module.exports = router;
