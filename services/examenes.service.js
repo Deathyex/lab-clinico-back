@@ -1,5 +1,6 @@
 const { faker } = require("@faker-js/faker");
 const randomName = faker.name.fullName();
+const boom = require('@hapi/boom');
 
 class ExamenesService{
 
@@ -15,32 +16,60 @@ class ExamenesService{
         id: faker.datatype.uuid(),
         name: faker.commerce.product(),
         price: parseInt(faker.commerce.price(), 10),
-        image: faker.image.imageUrl()
+        image: faker.image.imageUrl(),
+        isBlock: faker.datatype.boolean()
       });
     }
   }
 
-  create(){
-
-
+  async create(data){
+    const newExamen = {
+      id: faker.datatype.uuid(),
+      ...data
+    }
+    this.examenes.push(newExamen);
+    return newExamen;
   }
 
   find(){
-    return this.examenes;
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve(this.examenes);
+      }, 5000);
+    })
   }
 
-  findOne(){
-    return this.examenes.find(item => item.id === id);
+  async findOne(id){
+    const examen =  this.examenes.find(item => item.id === id);
+    if(!examen){
+      throw boom.notFound('Examen no encontrado');
+    }
+    if(examen.isBlock){
+      throw boom.conflict('Examen no permitido');
+    }
+    return examen;
   }
 
-  update(){
-
-
+  async update(id, changes){
+    const index = this.examenes.findIndex(item => item.id === id);
+    if ( index === -1 ){
+      throw boom.notFound('Examen no encontrado');
+    }
+    const examen = this.examenes[index];
+    this.examenes[index] = {
+      ...examen,
+      ...changes
+    };
+    return this.examenes[index];
   }
 
-  delete(){
-
-
+  async delete(id){
+    const index = this.examenes.findIndex(item => item.id === id);
+    if ( index === -1 ){
+      throw boom.notFound('Examen no encontrado');
+    }
+    this.examenes.splice(index, 1);
+    return { id };
   }
 
 }

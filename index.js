@@ -1,6 +1,8 @@
 const express = require("express");
 const routerApi =  require("./routes");
 
+const { logErrors, errorHandler, boomErrorHandler } = require('./middlewares/error.handler');
+
 const { faker } = require("@faker-js/faker");
 const randomName = faker.name.fullName();
 
@@ -18,6 +20,10 @@ app.get("/inicio", (req, res) =>{
 });
 
 routerApi(app);
+
+app.use(logErrors);
+app.use(boomErrorHandler);
+app.use(errorHandler);
 
 // app.get('/users', (req, res) => {
 //   const { limit, offset } = req.query;
