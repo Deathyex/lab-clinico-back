@@ -2,7 +2,7 @@ const express = require("express");
 
 const ExamenesService = require('./../services/examenes.service');
 const validatorHandler = require('./../middlewares/validator.handler');
-const { createExamenSchema, updateExamenSchema, getExamenSchema } = require('./..//schemas/examen.schema');
+const { createExamenSchema, updateExamenSchema, getExamenSchema } = require('./../schemas/examen.schema');
 
 
 const router = express.Router();

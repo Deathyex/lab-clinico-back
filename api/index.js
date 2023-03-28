@@ -8,7 +8,7 @@ const { faker } = require("@faker-js/faker");
 const randomName = faker.name.fullName();
 
 const app = express();
-const port = 3777;
+const port = process.env.PORT || 3777;
 
 app.use(express.json());
 
@@ -26,11 +26,11 @@ const optiones = {
 */
 app.use(cors());
 
-app.get("/", (req, res) =>{
+app.get("/api", (req, res) =>{
   res.send("Hola mi server en Express");
 });
 
-app.get("/inicio", (req, res) =>{
+app.get("/api/inicio", (req, res) =>{
   res.send("Inicio de Lab Clinico");
 });
 
