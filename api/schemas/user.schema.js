@@ -16,7 +16,7 @@ const id= Joi.string().alphanum();
 const name = Joi.string().min(8);
 const birthDate = Joi.date();
 const password = passwordComplexity(complexityOptions);
-//const role = Joi.string().min(5);
+const role = Joi.string().min(5);
 
 const createUserSchema = Joi.object({
   id: id.required(),
@@ -24,7 +24,7 @@ const createUserSchema = Joi.object({
   email: email.required(),
   birthDate: birthDate.required(),
   password: password.required(),
-  //role: role.required()
+  role: role
 });
 
 const updateUserSchema = Joi.object({
@@ -33,7 +33,7 @@ const updateUserSchema = Joi.object({
   name: name,
   email: email,
   birthDate: birthDate,
-  // role: role,
+  role: role,
 });
 
 const getUserSchema = Joi.object({
