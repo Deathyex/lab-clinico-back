@@ -8,7 +8,7 @@ const { createExamenSchema, updateExamenSchema, getExamenSchema } = require('./.
 const router = express.Router();
 const service =  new ExamenesService();
 
-router.get("/", async (req, res) =>{
+router.get("/", async (req, res,next) =>{
   try {
     const examenes = await service.find();
     res.json(examenes);
@@ -55,10 +55,11 @@ router.patch('/:idExamen',
     }
 });
 
-router.delete('/:idExamen', async (req, res) => {
+router.delete('/:idExamen',
   validatorHandler(getExamenSchema, 'params'),
   async (req, res, next) => {
     try {
+      console.log('aaaaa')
       const { idExamen } = req.params;
       await service.delete(idExamen);
       res.status(201).json({idExamen});
@@ -66,6 +67,6 @@ router.delete('/:idExamen', async (req, res) => {
       next(error);
     }
   }
-});
+);
 
 module.exports = router;

@@ -5,7 +5,10 @@ const { Examen, ExamenSchema } = require('.//examen.model');
 function setupModels(sequelize) {
   User.init(UserSchema, User.config(sequelize));
   Examen.init(ExamenSchema, Examen.config(sequelize));
-  // ingresa todos los eschema
+
+
+  Examen.asssociate(sequelize.models);
+  User.asssociate(sequelize.models);
 }
 
 module.exports =  setupModels;

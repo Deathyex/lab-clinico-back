@@ -1,5 +1,7 @@
 const { Model, DataTypes, Sequelize } = require('sequelize');
 
+const { USER_TABLE } = require('./user.model');
+
 const EXAMEN_TABLE = 'examenes';
 
 const ExamenSchema = {
@@ -22,10 +24,16 @@ const ExamenSchema = {
     field: 'examen_date',
     unique: false
   },
-  idPaciente: {
+  userId: {
     allowNull: false,
     type: DataTypes.STRING,
     field: 'id_paciente',
+    references: {
+      model: USER_TABLE,
+      key: 'id_document'
+    },
+    onUpdate: 'CASCADE',
+    onDelete: 'SET NULL'
   },
   createdAt: {
     allowNull: false,
@@ -40,8 +48,8 @@ const ExamenSchema = {
 }
 
 class Examen extends Model {
-  static asssociate() {
-    // associate
+  static asssociate(models) {
+    this.belongsTo(models.User, {as: 'user'});
   }
 
   static config(sequelize) {

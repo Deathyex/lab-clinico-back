@@ -11,7 +11,9 @@ class ExamenesService{
     }
 
   async find(){
-    const rta = await models.Examen.findAll();
+    const rta = await models.Examen.findAll({
+      include: ['user']
+    });
     return rta;
   }
 
@@ -33,7 +35,9 @@ class ExamenesService{
   }
 
   async delete(idExamen){
+    console.log("prueba")
     const examen = await models.Examen.findByPk(idExamen);
+    console.log("prueba1")
     await examen.destroy();
     return { idExamen };
   }
