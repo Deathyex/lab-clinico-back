@@ -12,13 +12,17 @@ class ExamenesService{
 
   async find(){
     const rta = await models.Examen.findAll({
-      include: ['user']
+      include: ['user'],
+      offset: 0,
+      limit: 6
     });
     return rta;
   }
 
   async findOne(idExamen){
-    const examen =  await models.Examen.findByPk(idExamen);
+    const examen =  await models.Examen.findByPk(idExamen, {
+      include: ['user']
+    });
     if(!examen){
       throw boom.notFound('Examen no encontrado');
     }
