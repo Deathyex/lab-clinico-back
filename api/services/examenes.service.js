@@ -1,46 +1,22 @@
-const { faker } = require("@faker-js/faker");
-const randomName = faker.name.fullName();
 const boom = require('@hapi/boom');
 
-const sequelize = require('../libs/sequelize');
+const { models } = require('./../libs/sequelize');
 
 class ExamenesService{
-
-  constructor(){
-    this.examenes = [];
-    this.generate();
-  }
-
-  generate(){
-    const limit = 100;
-    for (let index = 0; index < 100; index++) {
-      this.examenes.push({
-        id: faker.datatype.uuid(),
-        name: faker.commerce.product(),
-        price: parseInt(faker.commerce.price(), 10),
-        image: faker.image.imageUrl(),
-        isBlock: faker.datatype.boolean()
-      });
-    }
-  }
+  constructor(){}
 
   async create(data){
-    const newExamen = {
-      id: faker.datatype.uuid(),
-      ...data
-    }
-    this.examenes.push(newExamen);
+    const newExamen = await models.Examen.create(data);
     return newExamen;
-  }
+    }
 
   async find(){
-    const query = 'SELECT * FROM tasks';
-    const [data] = await sequelize.query(query);
-    return data;
+    const rta = await models.Examen.findAll();
+    return rta;
   }
 
-  async findOne(id){
-    const examen =  this.examenes.find(item => item.id === id);
+  async findOne(idExamen){
+    const examen =  await models.Examen.findByPk(idExamen);
     if(!examen){
       throw boom.notFound('Examen no encontrado');
     }
@@ -50,26 +26,16 @@ class ExamenesService{
     return examen;
   }
 
-  async update(id, changes){
-    const index = this.examenes.findIndex(item => item.id === id);
-    if ( index === -1 ){
-      throw boom.notFound('Examen no encontrado');
-    }
-    const examen = this.examenes[index];
-    this.examenes[index] = {
-      ...examen,
-      ...changes
-    };
-    return this.examenes[index];
+  async update(idExamen, changes){
+    const examen = await this.findOne(idExamen);
+    const rta = await examen.update(changes);
+    return rta;
   }
 
-  async delete(id){
-    const index = this.examenes.findIndex(item => item.id === id);
-    if ( index === -1 ){
-      throw boom.notFound('Examen no encontrado');
-    }
-    this.examenes.splice(index, 1);
-    return { id };
+  async delete(idExamen){
+    const examen = await models.Examen.findByPk(idExamen);
+    await examen.destroy();
+    return { idExamen };
   }
 
 }

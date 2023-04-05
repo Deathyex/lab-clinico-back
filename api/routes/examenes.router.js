@@ -9,16 +9,20 @@ const router = express.Router();
 const service =  new ExamenesService();
 
 router.get("/", async (req, res) =>{
-  const examenes = await service.find()
-  res.json(examenes);
+  try {
+    const examenes = await service.find();
+    res.json(examenes);
+  } catch (error) {
+    next(error);
+  }
 });
 
-router.get('/:id',
+router.get('/:idExamen',
   validatorHandler(getExamenSchema, 'params'),
   async (req, res, next) => {
     try {
-      const { id } = req.params;
-      const examen = await service.findOne(id);
+      const { idExamen } = req.params;
+      const examen = await service.findOne(idExamen);
       res.json(examen);
     } catch (error) {
       next(error);
@@ -27,30 +31,41 @@ router.get('/:id',
 
 router.post('/',
   validatorHandler(createExamenSchema, 'body'),
-  async (req, res) => {
-    const body = req.body;
-    const newExamen = await service.create(body);
-    res.status(201).json(newExamen);
+  async (req, res, next) => {
+    try {
+      const body = req.body;
+      const newExamen = await service.create(body);
+      res.status(201).json(newExamen);
+    } catch (error) {
+      next(error);
+    }
 });
 
-router.patch('/:id',
+router.patch('/:idExamen',
   validatorHandler(getExamenSchema, 'params'),
   validatorHandler(updateExamenSchema, 'body'),
   async (req, res, next) => {
     try {
-      const { id } = req.params;
+      const { idExamen } = req.params;
       const body = req.body;
-      const examen = await service.update(id, body);
+      const examen = await service.update(idExamen, body);
       res.json(examen);
     } catch (error) {
       next(error);
     }
 });
 
-router.delete('/:id', async (req, res) => {
-  const { id } = req.params;
-  const respuesta = await service.delete(id);
-  res.json(respuesta);
+router.delete('/:idExamen', async (req, res) => {
+  validatorHandler(getExamenSchema, 'params'),
+  async (req, res, next) => {
+    try {
+      const { idExamen } = req.params;
+      await service.delete(idExamen);
+      res.status(201).json({idExamen});
+    } catch (error) {
+      next(error);
+    }
+  }
 });
 
 module.exports = router;

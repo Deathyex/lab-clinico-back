@@ -1,24 +1,25 @@
 const Joi = require('joi');
 
-const id = Joi.string().uuid();
-const name =  Joi.string().min(3).max(15);
-const price = Joi.number().integer().min(10);
-const image = Joi.string().uri();
+const idExamen = Joi.string().uuid();
+const name =  Joi.string().min(3).max(255);
+const examenDate = Joi.date();
+const idPaciente= Joi.string().alphanum();
 
 const createExamenSchema = Joi.object({
   name: name.required(),
-  price: price.required(),
-  image: image.required()
+  examenDate: examenDate.required(),
+  idPaciente: idPaciente.required()
 });
 
 const updateExamenSchema = Joi.object({
+  idExamen: idExamen,
   name: name,
-  price: price,
-  image: image
+  examenDate: examenDate,
+  idPaciente: idPaciente
 });
 
 const getExamenSchema = Joi.object({
-  id: id.required(),
+  idExamen: idExamen.required(),
 });
 
 module.exports = { createExamenSchema, updateExamenSchema, getExamenSchema }
