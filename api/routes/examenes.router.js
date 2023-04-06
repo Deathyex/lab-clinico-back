@@ -2,15 +2,17 @@ const express = require("express");
 
 const ExamenesService = require('./../services/examenes.service');
 const validatorHandler = require('./../middlewares/validator.handler');
-const { createExamenSchema, updateExamenSchema, getExamenSchema } = require('./../schemas/examen.schema');
+const { createExamenSchema, updateExamenSchema, getExamenSchema, queryExamenSchema } = require('./../schemas/examen.schema');
 
 
 const router = express.Router();
 const service =  new ExamenesService();
 
-router.get("/", async (req, res,next) =>{
+router.get("/",
+validatorHandler(queryExamenSchema, 'query'),
+  async (req, res,next) =>{
   try {
-    const examenes = await service.find();
+    const examenes = await service.find(req.query);
     res.json(examenes);
   } catch (error) {
     next(error);

@@ -10,12 +10,16 @@ class ExamenesService{
     return newExamen;
     }
 
-  async find(){
-    const rta = await models.Examen.findAll({
+  async find(query){
+    const options = {
       include: ['user'],
-      offset: 0,
-      limit: 6
-    });
+    }
+    const { limit, offset } = query;
+    if (limit && offset ) {
+      options.limit = limit;
+      options.offset = offset;
+    }
+    const rta = await models.Examen.findAll(options);
     return rta;
   }
 
