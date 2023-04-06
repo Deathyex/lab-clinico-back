@@ -1,8 +1,8 @@
 const boom = require('@hapi/boom');
 
-const { models } = require('./../libs/sequelize');
+const { models } = require('../libs/sequelize');
 
-class ExamenesService{
+class ExamenService{
   constructor(){}
 
   async create(data){
@@ -10,28 +10,20 @@ class ExamenesService{
     return newExamen;
     }
 
-  async find(query){
-    const options = {
-      include: ['user'],
-    }
-    const { limit, offset } = query;
-    if (limit && offset ) {
-      options.limit = limit;
-      options.offset = offset;
-    }
-    const rta = await models.Examen.findAll(options);
+  async find(){
+    const rta = await models.Examen.findAll();
     return rta;
   }
 
   async findOne(idExamen){
-    const examen =  await models.Examen.findByPk(idExamen, {
-      include: ['user']
+    const examen =  await models.Examen.findByPk(idExamen,{
+      include: ['resultado']
     });
     if(!examen){
       throw boom.notFound('Examen no encontrado');
     }
     if(examen.isBlock){
-      throw boom.conflict('Examen no permitido');
+      throw boom.conflict('Examen con acceso restringido');
     }
     return examen;
   }
@@ -43,13 +35,11 @@ class ExamenesService{
   }
 
   async delete(idExamen){
-    console.log("prueba")
     const examen = await models.Examen.findByPk(idExamen);
-    console.log("prueba1")
     await examen.destroy();
     return { idExamen };
   }
 
 }
 
-module.exports = ExamenesService;
+module.exports = ExamenService;

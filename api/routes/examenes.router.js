@@ -1,35 +1,33 @@
-const express = require("express");
+const express = require('express');
 
-const ExamenesService = require('./../services/examenes.service');
+const ExamenService = require('./../services/examen.service');
 const validatorHandler = require('./../middlewares/validator.handler');
-const { createExamenSchema, updateExamenSchema, getExamenSchema, queryExamenSchema } = require('./../schemas/examen.schema');
-
+const { updateExamenSchema, createExamenSchema, getExamenSchema } = require('./../schemas/examen.schema');
 
 const router = express.Router();
-const service =  new ExamenesService();
+const service = new ExamenService();
 
-router.get("/",
-validatorHandler(queryExamenSchema, 'query'),
-  async (req, res,next) =>{
+router.get('/', async (req, res, next) => {
   try {
-    const examenes = await service.find(req.query);
-    res.json(examenes);
+    const resultados = await service.find();
+    res.json(resultados);
   } catch (error) {
     next(error);
   }
 });
 
-router.get('/:idExamen',
+router.get('/:id',
   validatorHandler(getExamenSchema, 'params'),
   async (req, res, next) => {
     try {
-      const { idExamen } = req.params;
-      const examen = await service.findOne(idExamen);
+      const { id } = req.params;
+      const examen = await service.findOne(id);
       res.json(examen);
     } catch (error) {
       next(error);
     }
-});
+  }
+);
 
 router.post('/',
   validatorHandler(createExamenSchema, 'body'),
@@ -41,30 +39,31 @@ router.post('/',
     } catch (error) {
       next(error);
     }
-});
+  }
+);
 
-router.patch('/:idExamen',
+router.patch('/:id',
   validatorHandler(getExamenSchema, 'params'),
   validatorHandler(updateExamenSchema, 'body'),
   async (req, res, next) => {
     try {
-      const { idExamen } = req.params;
+      const { id } = req.params;
       const body = req.body;
-      const examen = await service.update(idExamen, body);
+      const examen = await service.update(id, body);
       res.json(examen);
     } catch (error) {
       next(error);
     }
-});
+  }
+);
 
-router.delete('/:idExamen',
+router.delete('/:id',
   validatorHandler(getExamenSchema, 'params'),
   async (req, res, next) => {
     try {
-      console.log('aaaaa')
-      const { idExamen } = req.params;
-      await service.delete(idExamen);
-      res.status(201).json({idExamen});
+      const { id } = req.params;
+      await service.delete(id);
+      res.status(201).json({id});
     } catch (error) {
       next(error);
     }

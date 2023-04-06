@@ -49,8 +49,8 @@ const UserSchema = {
 
 class User extends Model {
   static asssociate(models) {
-    this.hasMany(models.Examen,{
-      as: 'examen',
+    this.hasMany(models.Resultado,{
+      as: 'resultado',
       foreignKey: 'userId'
     });
   }

@@ -1,14 +1,11 @@
 const { Model, DataTypes, Sequelize } = require('sequelize');
 
-const { USER_TABLE } = require('./user.model');
-
 const EXAMEN_TABLE = 'examenes';
 
 const ExamenSchema = {
-  idExamen: {
+  id: {
     allowNull: false,
-    type: Sequelize.UUID,
-    defaultValue: Sequelize.UUIDV4,
+    type: DataTypes.INTEGER,
     field: 'id_examen',
     unique: true,
     primaryKey: true
@@ -16,24 +13,12 @@ const ExamenSchema = {
   name: {
     allowNull: false,
     type: DataTypes.STRING,
-    unique: false
+    unique: true
   },
-  examenDate: {
-    allowNull: false,
-    type: DataTypes.DATEONLY,
-    field: 'examen_date',
-    unique: false
-  },
-  userId: {
+  function_description: {
     allowNull: false,
     type: DataTypes.STRING,
-    field: 'id_paciente',
-    references: {
-      model: USER_TABLE,
-      key: 'id_document'
-    },
-    onUpdate: 'CASCADE',
-    onDelete: 'SET NULL'
+    unique: false
   },
   createdAt: {
     allowNull: false,
@@ -49,7 +34,10 @@ const ExamenSchema = {
 
 class Examen extends Model {
   static asssociate(models) {
-    this.belongsTo(models.User, {as: 'user'});
+    this.hasMany(models.Resultado,{
+      as: 'resultado',
+      foreignKey: 'examenId'
+    });
   }
 
   static config(sequelize) {
