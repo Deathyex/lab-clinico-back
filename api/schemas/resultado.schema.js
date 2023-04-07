@@ -11,14 +11,12 @@ const offset = Joi.number().integer();
 
 
 const createResultadoSchema = Joi.object({
-  name: name.required(),
   resultadoDate: resultadoDate.required(),
   userId: userId.required(),
   examenId: examenId.required()
 });
 
 const updateResultadoSchema = Joi.object({
-  name: name,
   resultadoDate: resultadoDate,
   userId: userId,
   examenId: examenId
