@@ -6,6 +6,9 @@ const resultadoDate = Joi.date();
 const userId= Joi.string().alphanum();
 const examenId= Joi.number().integer();
 
+const resultadoDate_min = Joi.date();
+const resultadoDate_max = Joi.date();
+
 const limit = Joi.number().integer();
 const offset = Joi.number().integer();
 
@@ -28,7 +31,14 @@ const getResultadoSchema = Joi.object({
 
 const queryResultadoSchema = Joi.object({
   limit,
-  offset
+  offset,
+  name,
+  resultadoDate,
+  resultadoDate_min,
+  resultadoDate_max: resultadoDate_max.when('resultadoDate_min', {
+    is: Joi.date().required(),
+    then: Joi.required()
+  })
 });
 
 module.exports = { createResultadoSchema, updateResultadoSchema, getResultadoSchema, queryResultadoSchema }
