@@ -9,6 +9,18 @@ function setupModels(sequelize) {
   Examen.init(ExamenSchema, Examen.config(sequelize));
   Resultado.init(ResultadoSchema, Resultado.config(sequelize));
 
+  // Esta función se registra con el método beforeValidate de Sequelize para que se ejecute antes de la validación del modelo
+  User.beforeValidate((user, opciones) => {
+    // Esta línea toma el valor de user.name y lo convierte a mayúsculas
+    user.name = user.name.toUpperCase();
+  });
+
+  // Esta función se registra con el método beforeValidate de Sequelize para que se ejecute antes de la validación del modelo
+  Examen.beforeValidate((examen, opciones) => {
+    // Esta línea toma el valor de examen.name y lo convierte a minuscula
+    examen.name = examen.name.toUpperCase();
+  });
+
   Examen.afterUpdate(async (examenActualizado, opciones) => {
     // Buscar todos los registros en Resultado que correspondan al examen actualizado
     const resultados = await Resultado.findAll({ where: { examenId: examenActualizado.id } });
@@ -58,19 +70,20 @@ function setupModels(sequelize) {
 
   // Función que se ejecuta antes de guardar los datos de un registro en la tabla Resultado
   Resultado.beforeSave(async (instancia, opciones) => {
+    const User = await instancia.getUser();
     // Si el valor de la columna examenId ha cambiado
     if (instancia.changed('examenId')) {
       // Obtener el registro del examen correspondiente al examenId
       const Examen = await instancia.getExamen();
       // Actualizar el valor de la columna name concatenando el nombre del examen y la fecha del resultado
-      instancia.name = Examen.name + '-' + instancia.resultadoDate;
+      instancia.name = Examen.name + ' - ' + User.name + ' - ' + instancia.resultadoDate;
     }
     // Si el valor de la columna resultadoDate ha cambiado
     else if (instancia.changed('resultadoDate')) {
       // Obtener el registro del examen correspondiente al examenId
       const Examen = await instancia.getExamen();
       // Actualizar el valor de la columna name concatenando el nombre del examen y la fecha del resultado
-      instancia.name = Examen.name + '-' + instancia.resultadoDate;
+      instancia.name = Examen.name + ' - ' + User.name + ' - ' + instancia.resultadoDate;
     }
   });
 
