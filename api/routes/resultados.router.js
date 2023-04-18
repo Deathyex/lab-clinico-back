@@ -3,24 +3,28 @@ const passport = require('passport');
 
 const ResultadosService = require('./../services/resultados.service');
 const validatorHandler = require('../middlewares/validator.handler');
+const { checkRoles } = require('./../middlewares/auth.handler');
 const { createResultadoSchema, updateResultadoSchema, getResultadoSchema, queryResultadoSchema } = require('./../schemas/resultado.schema');
-
 
 const router = express.Router();
 const service =  new ResultadosService();
 
 router.get("/",
-validatorHandler(queryResultadoSchema, 'query'),
-  async (req, res,next) =>{
-  try {
-    const resultados = await service.find(req.query);
-    res.json(resultados);
-  } catch (error) {
-    next(error);
-  }
+  passport.authenticate('jwt', {session: false}),
+  checkRoles('admin', 'analista'),
+  validatorHandler(queryResultadoSchema, 'query'),
+    async (req, res,next) =>{
+    try {
+      const resultados = await service.find(req.query);
+      res.json(resultados);
+    } catch (error) {
+      next(error);
+    }
 });
 
 router.get('/:idResultado',
+  passport.authenticate('jwt', {session: false}),
+  checkRoles('admin', 'analista'),
   validatorHandler(getResultadoSchema, 'params'),
   async (req, res, next) => {
     try {
@@ -33,7 +37,8 @@ router.get('/:idResultado',
 });
 
 router.post('/',
-passport.authenticate('jwt', {session: false}),
+  passport.authenticate('jwt', {session: false}),
+  checkRoles('admin', 'analista'),
   validatorHandler(createResultadoSchema, 'body'),
   async (req, res, next) => {
     try {
@@ -46,6 +51,8 @@ passport.authenticate('jwt', {session: false}),
 });
 
 router.patch('/:idResultado',
+  passport.authenticate('jwt', {session: false}),
+  checkRoles('admin', 'analista'),
   validatorHandler(getResultadoSchema, 'params'),
   validatorHandler(updateResultadoSchema, 'body'),
   async (req, res, next) => {
@@ -60,6 +67,8 @@ router.patch('/:idResultado',
 });
 
 router.delete('/:idResultado',
+  passport.authenticate('jwt', {session: false}),
+  checkRoles('admin', 'analista'),
   validatorHandler(getResultadoSchema, 'params'),
   async (req, res, next) => {
     try {
