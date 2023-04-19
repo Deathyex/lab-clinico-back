@@ -48,6 +48,21 @@ class ResultadosService{
     return rta;
   }
 
+  async findByUser(userId) {
+    const resultados = await models.Resultado.findAll({
+      where: {
+        id_paciente: userId
+      },
+      include: [
+        {
+          model: models.User,
+          as: 'user'
+        }
+      ]
+    });
+    return resultados
+  }
+
   // Obtener resultado especifico
   async findOne(idResultado){
     const resultado =  await models.Resultado.findByPk(idResultado, {
