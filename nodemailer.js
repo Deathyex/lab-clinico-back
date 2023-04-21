@@ -8,22 +8,22 @@ async function sendMail() {
 
   // create reusable transporter object using the default SMTP transport
   let transporter = nodemailer.createTransport({
-    host: "smtp.ethereal.email",
-    secure: false, // true for 465, false for other ports
-    port: 587,
+    host: "smtp.gmail.com",
+    secure: true, // true for 465, false for other ports
+    port: 465,
     auth: {
-        user: 'felipe.metz43@ethereal.email',
-        pass: 'zy379ryPAApeA1YMRB'
+        user: 'fabiolabclinico@gmail.com',
+        pass: 'qgmqqihltubbpogr'
     }
   });
 
   // send mail with defined transport object
   let info = await transporter.sendMail({
-    from: 'felipe.metz43@ethereal.email', // sender address
-    to: "felipe.metz43@ethereal.email", // list of receivers
-    subject: "Hello ✔", // Subject line
-    text: "Hello world?", // plain text body
-    html: "<b>Hello world?</b>", // html body
+    from: 'fabiolabclinico@gmail.com', // sender address
+    to: "jyjavierop@gmail.com, fabian.jovalle1@gmail.com", // list of receivers
+    subject: "Inicio Lab clinico", // Subject line
+    text: "Este es el primer correo en la historia de este laboratorio clinico", // plain text body
+    html: "<b>Este es el primer correo en la historia de este laboratorio clinico</b>", // html body
   });
 
   console.log("Message sent: %s", info.messageId);
