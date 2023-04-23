@@ -13,7 +13,7 @@ function checkApiKey(req, res, next) {
 
 function checkAdminRole(req, res, next) {
   const user = req.user;
-  if (user.role == 'admin') {
+  if (user.role == 'ADMIN') {
     next();
   } else {
     next(boom.forbidden('No tiene los permisos suficientes para ejecutar esta accion'));
@@ -23,6 +23,8 @@ function checkAdminRole(req, res, next) {
 function checkRoles(...roles) {
   return(req, res, next) => {
     const user = req.user;
+    console.log(roles);
+    console.log(user.role);
     if (roles.includes(user.role)) {
       next();
     } else {

@@ -5,13 +5,15 @@ const ResultadosService = require('./../services/resultados.service');
 const validatorHandler = require('../middlewares/validator.handler');
 const { checkRoles } = require('./../middlewares/auth.handler');
 const { createResultadoSchema, updateResultadoSchema, getResultadoSchema, queryResultadoSchema } = require('./../schemas/resultado.schema');
+const AuthService = require('./../services/auth.service');
 
 const router = express.Router();
 const service =  new ResultadosService();
+const authService = new AuthService();
 
 router.get("/",
   passport.authenticate('jwt', {session: false}),
-  checkRoles('admin', 'analista'),
+  checkRoles('ADMIN', 'ANALISTA'),
   validatorHandler(queryResultadoSchema, 'query'),
     async (req, res,next) =>{
     try {
@@ -24,7 +26,7 @@ router.get("/",
 
 router.get('/:idResultado',
   passport.authenticate('jwt', {session: false}),
-  checkRoles('admin', 'analista'),
+  checkRoles('ADMIN', 'ANALISTA'),
   validatorHandler(getResultadoSchema, 'params'),
   async (req, res, next) => {
     try {
@@ -38,12 +40,13 @@ router.get('/:idResultado',
 
 router.post('/',
   passport.authenticate('jwt', {session: false}),
-  checkRoles('admin', 'analista'),
+  checkRoles('ADMIN', 'ANALISTA'),
   validatorHandler(createResultadoSchema, 'body'),
   async (req, res, next) => {
     try {
       const body = req.body;
       const newResultado = await service.create(body);
+      const email = authService.sendNewResultado(body.userId);
       res.status(201).json(newResultado);
     } catch (error) {
       next(error);
@@ -52,7 +55,7 @@ router.post('/',
 
 router.patch('/:idResultado',
   passport.authenticate('jwt', {session: false}),
-  checkRoles('admin', 'analista'),
+  checkRoles('ADMIN', 'ANALISTA'),
   validatorHandler(getResultadoSchema, 'params'),
   validatorHandler(updateResultadoSchema, 'body'),
   async (req, res, next) => {
@@ -68,7 +71,7 @@ router.patch('/:idResultado',
 
 router.delete('/:idResultado',
   passport.authenticate('jwt', {session: false}),
-  checkRoles('admin', 'analista'),
+  checkRoles('ADMIN', 'ANALISTA'),
   validatorHandler(getResultadoSchema, 'params'),
   async (req, res, next) => {
     try {
