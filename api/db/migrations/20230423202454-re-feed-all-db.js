@@ -11,7 +11,6 @@ module.exports = {
     await queryInterface.createTable(USER_TABLE, UserSchema);
     await queryInterface.createTable(RESULTADO_TABLE, ResultadoSchema);
   },
-
   async down (queryInterface) {
     await queryInterface.dropTable(EXAMEN_TABLE);
     await queryInterface.dropTable(USER_TABLE);
