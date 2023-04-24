@@ -2,10 +2,11 @@ const express = require("express");
 const passport = require('passport');
 
 const ResultadosService = require('./../services/resultados.service');
+const AuthService = require('./../services/auth.service');
+
 const validatorHandler = require('../middlewares/validator.handler');
 const { checkRoles } = require('./../middlewares/auth.handler');
 const { createResultadoSchema, updateResultadoSchema, getResultadoSchema, queryResultadoSchema } = require('./../schemas/resultado.schema');
-const AuthService = require('./../services/auth.service');
 
 const router = express.Router();
 const service =  new ResultadosService();
