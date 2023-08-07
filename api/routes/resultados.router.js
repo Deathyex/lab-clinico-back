@@ -1,8 +1,10 @@
 const express = require("express");
 const passport = require('passport');
+const fileUpload = require('express-fileupload');
 
 const ResultadosService = require('./../services/resultados.service');
 const AuthService = require('./../services/auth.service');
+const { uploadFile, getFiles, getFile, downloadFile, getFileURL } =  require('../../s3')
 
 const validatorHandler = require('../middlewares/validator.handler');
 const { checkRoles } = require('./../middlewares/auth.handler');
@@ -25,7 +27,7 @@ router.get("/",
     }
 });
 
-router.get('/:idResultado',
+router.get('/list/:idResultado',
   passport.authenticate('jwt', {session: false}),
   checkRoles('ADMIN', 'ANALISTA'),
   validatorHandler(getResultadoSchema, 'params'),
@@ -52,6 +54,28 @@ router.post('/',
     } catch (error) {
       next(error);
     }
+});
+
+router.get('/files', async (req, res) => {
+  const result = await getFiles()
+  res.json(result.Contents)
+});
+
+router.get('/files/:fileName', async (req, res) => {
+  const result = await getFileURL(req.params.fileName)
+  res.send({
+    url: result
+  })
+});
+
+router.get('/descargarpdf/:fileName', async (req, res) => {
+  await downloadFile(req.params.fileName)
+  res.json({message: " Descarga exitosa "})
+});
+
+router.post('/files', async (req, res) => {
+  const result = await uploadFile(req.files.file)
+  res.json({result})
 });
 
 router.patch('/:idResultado',

@@ -1,4 +1,5 @@
 const boom = require('@hapi/boom');
+const fileUpload = require('express-fileupload');
 
 const { models } = require('../libs/sequelize');
 const { Op } = require("sequelize");
