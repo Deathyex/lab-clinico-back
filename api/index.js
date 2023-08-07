@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const routerApi =  require("./routes");
 const { checkApiKey } = require('./middlewares/auth.handler');
+const fileUpload = require('express-fileupload');
 
 const { logErrors, errorHandler, boomErrorHandler } = require('./middlewares/error.handler');
 
@@ -10,6 +11,13 @@ const randomName = faker.name.fullName();
 
 const app = express();
 const port = process.env.PORT || 3777;
+
+app.use(fileUpload({
+  useTempFiles: true,
+  tempFileDir: './api/uploads'
+}));
+
+app.use(express.static('documents'))
 
 app.use(express.json());
 
