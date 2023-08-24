@@ -11,7 +11,14 @@ const client = new S3Client({
   }
 });
 
+<<<<<<< HEAD
+
+
 async function uploadFile(file){
+  const url = `https://lab-clinico-aws.s3.amazonaws.com/lab-clinico_${file.name}`
+=======
+async function uploadFile(file){
+>>>>>>> dev
   const stream = fs.createReadStream(file.tempFilePath);
   const uploadParams = {
     Bucket: config.aws_name,
@@ -19,7 +26,17 @@ async function uploadFile(file){
     Body: stream
   }
   const command = new PutObjectCommand(uploadParams);
+<<<<<<< HEAD
+  await client.send(command);
+  const command1 = new GetObjectCommand({
+    Bucket: config.aws_name,
+    Key: file.name
+  })
+  return await getSignedUrl(client, command1, { expiresIn: 604799 });
+
+=======
   return await client.send(command);
+>>>>>>> dev
 }
 
 async function getFiles(){
@@ -52,7 +69,11 @@ async function getFileURL(fileName){
     Bucket: config.aws_name,
     Key: fileName
   })
+<<<<<<< HEAD
+  return await getSignedUrl(client, command, { expiresIn: 604799 });
+=======
   return await getSignedUrl(client, command, { expiresIn: 3600 });
+>>>>>>> dev
 }
 
 module.exports = { uploadFile, getFiles, getFile, downloadFile, getFileURL };
