@@ -22,13 +22,13 @@ async function uploadFile(file){
     Body: stream
   }
   const command = new PutObjectCommand(uploadParams);
+  await client.send(command);
   const command1 = new GetObjectCommand({
     Bucket: config.aws_name,
-    Key: fileName
+    Key: file.name
   })
-  const result = await client.send(command1);
-  console.log(result)
-  result.Body.pipe(fs.createWriteStream(`./documents/${fileName}`))
+  return await getSignedUrl(client, command1, { expiresIn: 604799 });
+
 }
 
 async function getFiles(){
@@ -61,7 +61,7 @@ async function getFileURL(fileName){
     Bucket: config.aws_name,
     Key: fileName
   })
-  return await getSignedUrl(client, command, { expiresIn: 999999999999999999999999999999999999999999999999999999999 });
+  return await getSignedUrl(client, command, { expiresIn: 604799 });
 }
 
 module.exports = { uploadFile, getFiles, getFile, downloadFile, getFileURL };
