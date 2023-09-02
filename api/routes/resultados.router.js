@@ -43,7 +43,7 @@ router.get('/list/:idResultado',
 
 router.post('/',
   passport.authenticate('jwt', {session: false}),
-  checkRoles('ADMIN', 'ANALISTA'),
+  checkRoles('ADMIN', 'ANALISTA', 'PACIENTE'),
   validatorHandler(createResultadoSchema, 'body'),
   async (req, res, next) => {
     try {
