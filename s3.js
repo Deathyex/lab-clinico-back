@@ -26,7 +26,6 @@ async function uploadFile(file){
     Key: file.name
   })
   return await getSignedUrl(client, command1, { expiresIn: 604799 });
-
 }
 
 async function getFiles(){
