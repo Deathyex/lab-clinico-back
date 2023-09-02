@@ -11,7 +11,6 @@ const service = new ExamenService();
 
 router.get('/',
   passport.authenticate('jwt', {session: false}),
-  checkRoles('ADMIN', 'ANALISTA'),
   async (req, res, next) => {
     try {
       const resultados = await service.find();
@@ -23,7 +22,6 @@ router.get('/',
 
 router.get('/:id',
   passport.authenticate('jwt', {session: false}),
-  checkRoles('ADMIN', 'ANALISTA'),
   validatorHandler(getExamenSchema, 'params'),
   async (req, res, next) => {
     try {
