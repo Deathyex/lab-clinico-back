@@ -53,13 +53,7 @@ class ResultadosService{
     const resultados = await models.Resultado.findAll({
       where: {
         id_paciente: userId
-      },
-      include: [
-        {
-          model: models.User,
-          as: 'user'
-        }
-      ]
+      }
     });
     return resultados
   }
