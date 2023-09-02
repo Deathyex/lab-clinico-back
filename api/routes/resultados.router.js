@@ -27,14 +27,14 @@ router.get("/",
     }
 });
 
-router.get('/list/:idResultado',
+router.get('/list/:idPaciente',
   passport.authenticate('jwt', {session: false}),
   checkRoles('ADMIN', 'ANALISTA'),
-  validatorHandler(getResultadoSchema, 'params'),
   async (req, res, next) => {
+  console.log("hola")
     try {
-      const { idResultado } = req.params;
-      const resultado = await service.findOne(idResultado);
+      const { idPaciente } = req.params;
+      const resultado = await service.findByUser(idPaciente);
       res.json(resultado);
     } catch (error) {
       next(error);
