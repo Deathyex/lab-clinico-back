@@ -29,7 +29,7 @@ router.get("/",
 
 router.get('/list/:idPaciente',
   passport.authenticate('jwt', {session: false}),
-  checkRoles('ADMIN', 'ANALISTA'),
+  checkRoles('ADMIN', 'ANALISTA', 'PACIENTE'),
   async (req, res, next) => {
   console.log("hola")
     try {
