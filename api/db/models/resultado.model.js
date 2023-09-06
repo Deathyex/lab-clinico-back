@@ -27,7 +27,7 @@ const ResultadoSchema = {
   },
   url: {
     allowNull: false,
-    type: DataTypes.STRING,
+    type: DataTypes.TEXT,
     field: 'url',
     unique: false
   }
