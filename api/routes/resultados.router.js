@@ -74,8 +74,9 @@ router.get('/descargarpdf/:fileName', async (req, res) => {
 });
 
 router.post('/files', async (req, res) => {
-  const result = await uploadFile(req.files.file)
-  res.json({result})
+  //console.log(req.files.file)
+ const result = await uploadFile(req.files.file)
+ res.json({result})
 });
 
 router.patch('/:idResultado',
