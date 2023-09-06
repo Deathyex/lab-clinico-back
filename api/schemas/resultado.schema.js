@@ -2,7 +2,7 @@ const Joi = require('joi');
 
 const idResultado = Joi.string().uuid();
 const name =  Joi.string().min(3).max(255);
-const url =  Joi.string().min(3).max(1005);
+const url =  Joi.string().min(3);
 const resultadoDate = Joi.date();
 const userId= Joi.string().alphanum();
 const examenId= Joi.number().integer();
