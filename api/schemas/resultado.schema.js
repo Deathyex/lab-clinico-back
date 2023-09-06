@@ -16,13 +16,15 @@ const offset = Joi.number().integer();
 const createResultadoSchema = Joi.object({
   resultadoDate: resultadoDate.required(),
   userId: userId.required(),
-  examenId: examenId.required()
+  examenId: examenId.required(),
+  url: url.required()
 });
 
 const updateResultadoSchema = Joi.object({
   resultadoDate: resultadoDate,
   userId: userId,
-  examenId: examenId
+  examenId: examenId,
+  url: url
 });
 
 const getResultadoSchema = Joi.object({

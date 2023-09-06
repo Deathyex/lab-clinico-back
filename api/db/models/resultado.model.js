@@ -25,6 +25,13 @@ const ResultadoSchema = {
     field: 'resultado_date',
     unique: false
   },
+  url: {
+    allowNull: false,
+    type: DataTypes.STRING,
+    field: 'url',
+    unique: false
+  }
+  ,
   userId: {
     allowNull: false,
     type: DataTypes.STRING,
