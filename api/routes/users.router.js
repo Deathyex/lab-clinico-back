@@ -1,73 +1,78 @@
 const express = require('express');
 
-const UserService = require('./../services/user.service');
-const validatorHandler = require('./../middlewares/validator.handler');
-const { updateUserSchema, createUserSchema, getUserSchema } = require('./../schemas/user.schema');
+const UserService = require('./../services/user.service'); // Importa el servicio de usuarios
+const validatorHandler = require('./../middlewares/validator.handler'); // Importa el manejador de validaciones
+const { updateUserSchema, createUserSchema, getUserSchema } = require('./../schemas/user.schema'); // Importa los esquemas de validación
 
-const router = express.Router();
-const service = new UserService();
+const router = express.Router(); // Crea un nuevo enrutador
+const service = new UserService(); // Crea una nueva instancia del servicio de usuarios
 
+// Ruta para obtener todos los usuarios
 router.get('/', async (req, res, next) => {
   try {
-    const users = await service.find();
-    res.json(users);
+    const users = await service.find(); // Obtiene todos los usuarios desde el servicio
+    res.json(users); // Responde con la lista de usuarios
   } catch (error) {
-    next(error);
+    next(error); // Pasa el error al siguiente middleware
   }
 });
 
+// Ruta para obtener un usuario por su ID
 router.get('/:id',
-  validatorHandler(getUserSchema, 'params'),
+  validatorHandler(getUserSchema, 'params'), // Valida el ID del usuario
   async (req, res, next) => {
     try {
       const { id } = req.params;
-      const category = await service.findOne(id);
-      res.json(category);
+      const user = await service.findOne(id); // Obtiene un usuario por su ID desde el servicio
+      res.json(user); // Responde con el usuario encontrado
     } catch (error) {
-      next(error);
+      next(error); // Pasa el error al siguiente middleware
     }
   }
 );
 
+// Ruta para crear un nuevo usuario
 router.post('/',
-  validatorHandler(createUserSchema, 'body'),
+  validatorHandler(createUserSchema, 'body'), // Valida los datos del nuevo usuario
   async (req, res, next) => {
     try {
       const body = req.body;
-      const newCategory = await service.create(body);
-      res.status(201).json(newCategory);
+      const newUser = await service.create(body); // Crea un nuevo usuario en el servicio
+      res.status(201).json(newUser); // Responde con el nuevo usuario y un código de estado 201 (creado)
     } catch (error) {
-      next(error);
+      next(error); // Pasa el error al siguiente middleware
     }
   }
 );
 
+// Ruta para actualizar un usuario por su ID
 router.patch('/:id',
-  validatorHandler(getUserSchema, 'params'),
-  validatorHandler(updateUserSchema, 'body'),
+  validatorHandler(getUserSchema, 'params'), // Valida el ID del usuario
+  validatorHandler(updateUserSchema, 'body'), // Valida los datos actualizados del usuario
   async (req, res, next) => {
     try {
       const { id } = req.params;
       const body = req.body;
-      const category = await service.update(id, body);
-      res.json(category);
+      const updatedUser = await service.update(id, body); // Actualiza un usuario en el servicio
+      res.json(updatedUser); // Responde con el usuario actualizado
     } catch (error) {
-      next(error);
+      next(error); // Pasa el error al siguiente middleware
     }
   }
 );
 
+// Ruta para eliminar un usuario por su ID
 router.delete('/:id',
-  validatorHandler(getUserSchema, 'params'),
+  validatorHandler(getUserSchema, 'params'), // Valida el ID del usuario
   async (req, res, next) => {
     try {
       const { id } = req.params;
-      await service.delete(id);
-      res.status(201).json({id});
+      await service.delete(id); // Elimina un usuario en el servicio
+      res.status(201).json({id}); // Responde con el ID del usuario eliminado
     } catch (error) {
-      next(error);
+      next(error); // Pasa el error al siguiente middleware
     }
   }
 );
 
-module.exports = router;
+module.exports = router; // Exporta el enrutador para ser utilizado en otros archivos
