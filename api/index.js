@@ -1,56 +1,60 @@
+// Importa los módulos necesarios
 const express = require("express");
 const cors = require("cors");
 const routerApi =  require("./routes");
+
+// Importa middlewares
 const { checkApiKey } = require('./middlewares/auth.handler');
 const fileUpload = require('express-fileupload');
-
 const { logErrors, errorHandler, boomErrorHandler } = require('./middlewares/error.handler');
 
+// Importa Faker
 const { faker } = require("@faker-js/faker");
 const randomName = faker.name.fullName();
 
+// Crea una instancia de Express
 const app = express();
+
+// Define el puerto
 const port = process.env.PORT || 3777;
 
+// Middleware para manejar la subida de archivos
 app.use(fileUpload({
   useTempFiles: true,
   tempFileDir: './api/uploads'
 }));
 
+// Middleware para servir archivos estáticos desde la carpeta 'documents'
 app.use(express.static('documents'))
 
+// Middleware para parsear el cuerpo de las peticiones a JSON
 app.use(express.json());
 
-//const whitelist = ["dominios permitidoos"]
-/*
-const optiones = {
-  origin: (origin, callback) => {
-    if (whitelist.includes()){
-      callback(null, true);
-    } else {
-      callback(new Error('no permitido');)
-    }
-  }
-}
-*/
+// Middleware para habilitar CORS (permite solicitudes desde cualquier origen)
 app.use(cors());
 
+// Comentario: Requiere un archivo de utilidad para autenticación
 require('./utils/auth');
 
+// Ruta principal para verificar si el servidor está en funcionamiento
 app.get("/api", (req, res) =>{
   res.send("Hola mi server en Express");
 });
 
+// Ruta protegida por un middleware de autenticación (checkApiKey)
 app.get("/api/inicio", checkApiKey, (req, res) =>{
   res.send("Inicio de Lab Clinico");
 });
 
+// Configura las rutas definidas en el archivo routes.js
 routerApi(app);
 
+// Middlewares de manejo de errores
 app.use(logErrors);
 app.use(boomErrorHandler);
 app.use(errorHandler);
 
+// Comentario: Ejemplo de una ruta que maneja parámetros de consulta
 // app.get('/users', (req, res) => {
 //   const { limit, offset } = req.query;
 //   if(limit && offset){
@@ -63,6 +67,7 @@ app.use(errorHandler);
 //   };
 // });
 
+// Comentario: Ejemplo de una ruta con parámetros de ruta
 // app.get('/categories/:categoryId/examenes/:examenId', (req, res) => {
 //   const { categoryId, examenId } = req.params;
 //   res.json({
@@ -71,6 +76,7 @@ app.use(errorHandler);
 //   });
 // });
 
+// Inicia el servidor y escucha en el puerto especificado
 app.listen(port, () =>{
   console.log("My port: " + port);
 });

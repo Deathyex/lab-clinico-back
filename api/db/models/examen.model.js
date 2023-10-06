@@ -1,7 +1,10 @@
+// Importación de las clases y constantes necesarias desde sequelize
 const { Model, DataTypes, Sequelize } = require('sequelize');
 
+// Nombre de la tabla en la base de datos
 const EXAMEN_TABLE = 'examenes';
 
+// Definición del esquema del modelo
 const ExamenSchema = {
   id: {
     allowNull: false,
@@ -32,6 +35,7 @@ const ExamenSchema = {
   }
 }
 
+// Definición de la clase Examen que extiende del modelo de Sequelize
 class Examen extends Model {
   static asssociate(models) {
     this.hasMany(models.Resultado,{
@@ -50,4 +54,5 @@ class Examen extends Model {
   }
 }
 
+// Exportación de las constantes y la clase
 module.exports = { EXAMEN_TABLE, ExamenSchema, Examen }

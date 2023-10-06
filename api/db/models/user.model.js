@@ -1,7 +1,10 @@
+// Importación de las clases y constantes necesarias desde sequelize
 const { Model, DataTypes, Sequelize } = require('sequelize');
 
+// Nombre de la tabla en la base de datos
 const USER_TABLE = 'users';
 
+// Definición del esquema del modelo de Usuario
 const UserSchema = {
   id: {
     allowNull: false,
@@ -52,6 +55,7 @@ const UserSchema = {
   }
 }
 
+// Definición de la clase User que extiende del modelo de Sequelize
 class User extends Model {
   static asssociate(models) {
     this.hasMany(models.Resultado,{
@@ -70,4 +74,5 @@ class User extends Model {
   }
 }
 
+// Exportación de las constantes y la clase
 module.exports = { USER_TABLE, UserSchema, User }

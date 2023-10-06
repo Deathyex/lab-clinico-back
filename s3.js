@@ -3,6 +3,7 @@ const { config } = require('./api/config/config');
 const fs = require('fs');
 const { getSignedUrl } = require('@aws-sdk/s3-request-presigner');
 
+// Crear una instancia del cliente S3
 const client = new S3Client({
   region: config.aws_region,
   credentials: {
@@ -11,7 +12,10 @@ const client = new S3Client({
   }
 });
 
+// Función para subir un archivo a S3
 async function uploadFile(file){
+  console.log("------------------------------------------------------------")
+  console.log(file)
   const url = `https://lab-clinico-aws.s3.amazonaws.com/lab-clinico_${file.name}`
   const stream = fs.createReadStream(file.tempFilePath);
   const uploadParams = {
@@ -28,6 +32,7 @@ async function uploadFile(file){
   return await getSignedUrl(client, command1, { expiresIn: 604799 });
 }
 
+// Función para obtener una lista de archivos en el bucket
 async function getFiles(){
   const command = new ListObjectsCommand({
     Bucket: config.aws_name
@@ -35,6 +40,7 @@ async function getFiles(){
   return await client.send(command);
 }
 
+// Función para obtener un archivo específico del bucket
 async function getFile(fileName){
   const command = new GetObjectCommand({
     Bucket: config.aws_name,
@@ -43,6 +49,7 @@ async function getFile(fileName){
   return await client.send(command);
 }
 
+// Función para descargar un archivo del bucket
 async function downloadFile(fileName){
   const command = new GetObjectCommand({
     Bucket: config.aws_name,
@@ -53,6 +60,7 @@ async function downloadFile(fileName){
   result.Body.pipe(fs.createWriteStream(`./documents/${fileName}`))
 }
 
+// Función para obtener la URL firmada de un archivo
 async function getFileURL(fileName){
   const command = new GetObjectCommand({
     Bucket: config.aws_name,
