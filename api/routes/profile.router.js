@@ -4,20 +4,21 @@ const passport = require('passport');
 const ResultadosService = require('./../services/resultados.service');
 const { config } = require('../config/config');
 
-const router = express.Router();
-const service =  new ResultadosService();
+const router = express.Router(); // Creación del router
+const service =  new ResultadosService(); // Instancia del servicio de resultados
 
+// Ruta para obtener los resultados del usuario autenticado
 router.get('/mis-resultados',
-  passport.authenticate('jwt', {session: false}),
+  passport.authenticate('jwt', {session: false}), // Autenticación con JWT
   async (req, res, next) => {
     try {
-      const user = req.user
-      const resultados = await service.findByUser(user.sub);
-      res.json(resultados);
+      const user = req.user; // Obtener el usuario autenticado del token JWT
+      const resultados = await service.findByUser(user.sub); // Buscar resultados por el ID del usuario
+      res.json(resultados); // Responder con los resultados encontrados
     } catch (error) {
-      next(error);
+      next(error); // Pasar el error al siguiente middleware
     }
   }
 );
 
-module.exports = router;
+module.exports = router; // Exportar el router para ser utilizado en otros archivos
