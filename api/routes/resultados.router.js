@@ -15,7 +15,7 @@ const service =  new ResultadosService(); // Instancia del servicio de resultado
 const authService = new AuthService(); // Instancia del servicio de autenticación
 
 // Middleware para la carga de archivos
-router.use(fileUpload());
+//router.use(fileUpload());
 
 // Ruta para obtener todos los resultados (con validaciones de rol y esquema de consulta)
 router.get("/",
@@ -83,7 +83,6 @@ router.get('/descargarpdf/:fileName', async (req, res) => {
 
 // Ruta para cargar un archivo
 router.post('/files', async (req, res) => {
-  console.log(req.files)
   const result = await uploadFile(req.files.file); // Cargar un archivo
   res.json({result}); // Responder con el resultado de la carga del archivo
 });
