@@ -253,6 +253,7 @@ table, td { color: #000000; } #u_body a { color: #0000ee; text-decoration: under
 
   // Método para enviar un correo de notificación de nuevo resultado
   async sendNewResultado(userId) {
+    console.log(userId)
     const user = await service.findOne(userId);
 
     // Si el usuario no existe, lanza un error de no autorizado
@@ -418,6 +419,7 @@ table, td { color: #000000; } #u_body a { color: #0000ee; text-decoration: under
   </tbody>
 </table> `, // html body
     }
+    console.log(userId)
     const rta = await this.sendMail(mail);
     return rta;
   }
@@ -430,9 +432,10 @@ table, td { color: #000000; } #u_body a { color: #0000ee; text-decoration: under
       port: 465,
       auth: {
           user: 'fabiolabclinico@gmail.com',
-          pass: 'qgmqqihltubbpogr'
+          pass: 'lsxwsvadpfjxqjdy'
       }
     });
+
 
     // Envía el correo electrónico
     await transporter.sendMail(infomail);
