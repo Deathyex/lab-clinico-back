@@ -83,6 +83,7 @@ router.get('/descargarpdf/:fileName', async (req, res) => {
 
 // Ruta para cargar un archivo
 router.post('/files', async (req, res) => {
+  console.log(req.files)
   const result = await uploadFile(req.files.file); // Cargar un archivo
   res.json({result}); // Responder con el resultado de la carga del archivo
 });
