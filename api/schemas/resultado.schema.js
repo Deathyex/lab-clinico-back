@@ -2,7 +2,9 @@ const Joi = require('joi'); // Importa la librería Joi para la validación de d
 
 const idResultado = Joi.string().uuid(); // Define una validación para el campo "idResultado", que debe ser una cadena UUID.
 const name =  Joi.string().min(3).max(255); // Define una validación para el campo "name", que debe ser una cadena de entre 3 y 255 caracteres.
-const url =  Joi.string().min(3).max(512); // Define una validación para el campo "url", que debe ser una cadena de entre 3 y 512 caracteres.
+
+const url =  Joi.string().min(3); // Define una validación para el campo "url", que debe ser una cadena de entre 3 y 512 caracteres.
+
 const resultadoDate = Joi.date(); // Define una validación para el campo "resultadoDate", que debe ser una fecha.
 const userId = Joi.string().alphanum(); // Define una validación para el campo "userId", que debe ser una cadena alfanumérica.
 const examenId = Joi.number().integer(); // Define una validación para el campo "examenId", que debe ser un número entero.

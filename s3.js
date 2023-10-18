@@ -14,6 +14,8 @@ const client = new S3Client({
 
 // Función para subir un archivo a S3
 async function uploadFile(file){
+  console.log("------------------------------------------------------------")
+  console.log(file)
   const url = `https://lab-clinico-aws.s3.amazonaws.com/lab-clinico_${file.name}`
   const stream = fs.createReadStream(file.tempFilePath);
   const uploadParams = {

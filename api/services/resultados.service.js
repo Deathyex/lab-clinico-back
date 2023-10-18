@@ -9,7 +9,9 @@ class ResultadosService{
 
   // Crear resultados
   async create(data){
+    console.log(data)
     const newResultado = await models.Resultado.create(data);
+    console.log("holaaaaaaaaaaaaaaaaaaaaaaa")
     return newResultado;
     }
 

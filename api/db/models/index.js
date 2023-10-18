@@ -28,6 +28,7 @@ function setupModels(sequelize) {
 
     // Actualizar la columna name en cada uno de los registros encontrados
     await Promise.all(resultados.map(async (resultado) => {
+      console.log("holaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
       resultado.name = examenActualizado.name + '-' + resultado.getUser().name + resultado.resultadoDate;
       await resultado.save();
     }));
@@ -53,6 +54,7 @@ function setupModels(sequelize) {
       const User = await instancia.getUser();
       // Asigna un valor a la columna "name" de la instancia concatenando los valores de la columna "name" de Examen, User y la columna "resultadoDate" de Resultado
       instancia.name = Examen.name + ' - ' + User.name + ' - ' + instancia.resultadoDate;
+
     }
   });
 
@@ -77,7 +79,9 @@ function setupModels(sequelize) {
       // Obtener el registro del examen correspondiente al examenId
       const Examen = await instancia.getExamen();
       // Actualizar el valor de la columna name concatenando el nombre del examen y la fecha del resultado
-      instancia.name = Examen.name + ' - ' + User.name + ' - ' + instancia.resultadoDate;
+      //instancia.name = Examen.name + ' - ' + User.name + ' - ' + instancia.resultadoDate;
+      console.log(Examen.name + '-' + User.name + '-' + instancia.resultadoDate)
+      instancia.name = Examen.name + '-' + User.name + '-' + instancia.resultadoDate;
     }
     // Si el valor de la columna resultadoDate ha cambiado
     else if (instancia.changed('resultadoDate')) {
