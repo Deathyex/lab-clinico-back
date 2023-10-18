@@ -13,7 +13,7 @@ async function sendMail() {
     port: 465,
     auth: {
         user: 'fabiolabclinico@gmail.com',
-        pass: 'lsxw svad pfjx qjdy'
+        pass: 'lsxwsvadpfjxqjdy'
     }
   });
 
