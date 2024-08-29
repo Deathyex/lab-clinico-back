@@ -1,4 +1,4 @@
-const { config } =  require('./../config/config');
+const { config } =  require('../config/config');
 
 // Extraer el nombre de usuario y contraseña de la configuración
 const USER = encodeURIComponent(config.dbUser);

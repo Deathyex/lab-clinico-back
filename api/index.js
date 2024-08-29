@@ -4,13 +4,7 @@ const cors = require("cors");
 const routerApi =  require("./routes");
 
 // Importa middlewares
-const { checkApiKey } = require('./middlewares/auth.handler');
 const fileUpload = require('express-fileupload');
-const { logErrors, errorHandler, boomErrorHandler } = require('./middlewares/error.handler');
-
-// Importa Faker
-const { faker } = require("@faker-js/faker");
-const randomName = faker.name.fullName();
 
 // Crea una instancia de Express
 const app = express();
@@ -50,9 +44,7 @@ app.get("/api/inicio", checkApiKey, (req, res) =>{
 routerApi(app);
 
 // Middlewares de manejo de errores
-app.use(logErrors);
-app.use(boomErrorHandler);
-app.use(errorHandler);
+
 
 // Comentario: Ejemplo de una ruta que maneja parámetros de consulta
 // app.get('/users', (req, res) => {
