@@ -28,7 +28,6 @@ function setupModels(sequelize) {
 
     // Actualizar la columna name en cada uno de los registros encontrados
     await Promise.all(resultados.map(async (resultado) => {
-      console.log("holaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
       resultado.name = examenActualizado.name + '-' + resultado.getUser().name + resultado.resultadoDate;
       await resultado.save();
     }));
