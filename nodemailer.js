@@ -1,37 +1,29 @@
 const nodemailer = require("nodemailer");
+const { config } = require('./api/config/config');
 
-// async..await is not allowed in global scope, must use a wrapper
-async function sendMail() {
-  // Generate test SMTP service account from ethereal.email
-  // Only needed if you don't have a real mail account for testing
-  let testAccount = await nodemailer.createTestAccount();
-
-  // create reusable transporter object using the default SMTP transport
+async function sendMail(to, subject, text, html) {
+  // Crear un objeto de transporte reusable usando SMTP
   let transporter = nodemailer.createTransport({
-    host: "smtp.gmail.com",
-    secure: true, // true for 465, false for other ports
-    port: 465,
+    host: "smtp.office365.com",
+    port: 587,
+    secure: false, // true para puerto 465, false para otros puertos
     auth: {
-        user: 'fabiolabclinico@gmail.com',
-        pass: 'lsxwsvadpfjxqjdy'
-    }
+      user: config.emailUser,
+      pass: config.emailPass,
+    },
   });
 
-  // send mail with defined transport object
+  // Enviar correo con el objeto de transporte definido
   let info = await transporter.sendMail({
-    from: 'fabiolabclinico@gmail.com', // sender address
-    to: "jyjavierop@gmail.com, fabian.jovalle1@gmail.com", // list of receivers
-    subject: "Inicio Lab clinico", // Subject line
-    text: "Este es el primer correo en la historia de este laboratorio clinico", // plain text body
-    html: "<b>Este es el primer correo en la historia de este laboratorio clinico</b>", // html body
+    from: '"Laboratorio Clínico" <aplicativolabclinico@outlook.com>', // Dirección del remitente
+    to: to, // Lista de destinatarios
+    subject: subject, // Línea de asunto
+    text: text, // Cuerpo del correo en texto plano
+    html: html, // Cuerpo del correo en HTML
   });
 
   console.log("Message sent: %s", info.messageId);
-  // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
-
-  // Preview only available when sending through an Ethereal account
-  console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
-  // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
 }
 
-sendMail();
+// Ejemplo de uso
+sendMail('santiagoari0209@gmail.com', 'Primer Correo', 'Primer Correo Lab', '<p>Examen de sangre</p>');
