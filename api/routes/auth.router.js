@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken'); // JWT para generar tokens
 const AuthService = require('../services/auth.service'); // Servicio de autenticación
 
 const router = express.Router(); // Creación del router
-const service = new AuthService(); // Instancia del servicio de autenticación
+const authService = new AuthService(); // Instancia del servicio de autenticación
 
 // Ruta de inicio de sesión
 router.post('/login',
@@ -14,7 +14,7 @@ router.post('/login',
   async (req, res, next) => {
     try {
       const user = req.user;
-      res.json(service.signToken(user)); // Responder con un token JWT
+      res.json(authService.signToken(user)); // Responder con un token JWT
     } catch (error) {
       next(error); // Pasar el error al siguiente middleware
     }
@@ -26,7 +26,7 @@ router.post('/recuperacion',
   async (req, res, next) => {
     try {
       const { email } = req.body;
-      const rta = await service.sendResetPassword(email);
+      const rta = await authService.sendResetPassword(email);
       res.json(rta); // Responder con la respuesta del servicio
     } catch (error) {
       next(error); // Pasar el error al siguiente middleware
@@ -39,7 +39,7 @@ router.post('/actualizacion-contra',
   async (req, res, next) => {
     try {
       const { token, newPassword } = req.body;
-      const rta = await service.changePassword(token, newPassword);
+      const rta = await authService.changePassword(token, newPassword);
       res.json(rta); // Responder con la respuesta del servicio
     } catch (error) {
       next(error); // Pasar el error al siguiente middleware

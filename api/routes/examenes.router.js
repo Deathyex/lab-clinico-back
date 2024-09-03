@@ -7,14 +7,14 @@ const { checkRoles } = require('./../middlewares/auth.handler');
 const { updateExamenSchema, createExamenSchema, getExamenSchema } = require('./../schemas/examen.schema');
 
 const router = express.Router(); // Creación del router
-const service = new ExamenService(); // Instancia del servicio de exámenes
+const examenService = new ExamenService(); // Instancia del servicio de exámenes
 
 // Ruta para obtener todos los exámenes
 router.get('/',
   passport.authenticate('jwt', {session: false}), // Autenticación con JWT
   async (req, res, next) => {
     try {
-      const resultados = await service.find();
+      const resultados = await examenService.find();
       res.json(resultados);
     } catch (error) {
       next(error);
@@ -28,7 +28,7 @@ router.get('/:id',
   async (req, res, next) => {
     try {
       const { id } = req.params;
-      const examen = await service.findOne(id);
+      const examen = await examenService.findOne(id);
       res.json(examen);
     } catch (error) {
       next(error);
@@ -44,7 +44,7 @@ router.post('/',
   async (req, res, next) => {
     try {
       const body = req.body;
-      const newExamen = await service.create(body);
+      const newExamen = await examenService.create(body);
       res.status(201).json(newExamen); // Respuesta con el examen creado
     } catch (error) {
       next(error);
@@ -62,7 +62,7 @@ router.patch('/:id',
     try {
       const { id } = req.params;
       const body = req.body;
-      const examen = await service.update(id, body);
+      const examen = await examenService.update(id, body);
       res.json(examen); // Respuesta con el examen actualizado
     } catch (error) {
       next(error);
@@ -78,7 +78,7 @@ router.delete('/:id',
   async (req, res, next) => {
     try {
       const { id } = req.params;
-      await service.delete(id);
+      await examenService.delete(id);
       res.status(201).json({id}); // Respuesta con el ID del examen eliminado
     } catch (error) {
       next(error);

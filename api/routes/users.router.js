@@ -5,12 +5,12 @@ const validatorHandler = require('./../middlewares/validator.handler'); // Impor
 const { updateUserSchema, createUserSchema, getUserSchema } = require('./../schemas/user.schema'); // Importa los esquemas de validación
 
 const router = express.Router(); // Crea un nuevo enrutador
-const service = new UserService(); // Crea una nueva instancia del servicio de usuarios
+const userService = new UserService(); // Crea una nueva instancia del servicio de usuarios
 
 // Ruta para obtener todos los usuarios
 router.get('/', async (req, res, next) => {
   try {
-    const users = await service.find(); // Obtiene todos los usuarios desde el servicio
+    const users = await userService.find(); // Obtiene todos los usuarios desde el servicio
     res.json(users); // Responde con la lista de usuarios
   } catch (error) {
     next(error); // Pasa el error al siguiente middleware
@@ -23,7 +23,7 @@ router.get('/:id',
   async (req, res, next) => {
     try {
       const { id } = req.params;
-      const user = await service.findOne(id); // Obtiene un usuario por su ID desde el servicio
+      const user = await userService.findOne(id); // Obtiene un usuario por su ID desde el servicio
       res.json(user); // Responde con el usuario encontrado
     } catch (error) {
       next(error); // Pasa el error al siguiente middleware
@@ -37,7 +37,7 @@ router.post('/',
   async (req, res, next) => {
     try {
       const body = req.body;
-      const newUser = await service.create(body); // Crea un nuevo usuario en el servicio
+      const newUser = await userService.create(body); // Crea un nuevo usuario en el servicio
       res.status(201).json(newUser); // Responde con el nuevo usuario y un código de estado 201 (creado)
     } catch (error) {
       next(error); // Pasa el error al siguiente middleware
@@ -53,7 +53,7 @@ router.patch('/:id',
     try {
       const { id } = req.params;
       const body = req.body;
-      const updatedUser = await service.update(id, body); // Actualiza un usuario en el servicio
+      const updatedUser = await userService.update(id, body); // Actualiza un usuario en el servicio
       res.json(updatedUser); // Responde con el usuario actualizado
     } catch (error) {
       next(error); // Pasa el error al siguiente middleware
@@ -67,7 +67,7 @@ router.delete('/:id',
   async (req, res, next) => {
     try {
       const { id } = req.params;
-      await service.delete(id); // Elimina un usuario en el servicio
+      await userService.delete(id); // Elimina un usuario en el servicio
       res.status(201).json({id}); // Responde con el ID del usuario eliminado
     } catch (error) {
       next(error); // Pasa el error al siguiente middleware
