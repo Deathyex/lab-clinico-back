@@ -7,19 +7,19 @@ class ExamenService {
 	constructor() {}
 
 	// Método para crear un nuevo examen
-	async create(data) {
+	async createExamen(data) {
 		const newExamen = await models.Examen.create(data);
 		return newExamen;
 	}
 
 	// Método para obtener todos los exámenes
-	async find() {
-		const rta = await models.Examen.findAll();
-		return rta;
+	async findAllExamenes() {
+		const examenes = await models.Examen.findAll();
+		return examenes;
 	}
 
 	// Método para encontrar un examen por su ID
-	async findOne(idExamen) {
+	async findOneExamen(idExamen) {
 		const examen = await models.Examen.findByPk(idExamen, {
 			include: ['resultado']
 		});
@@ -38,14 +38,14 @@ class ExamenService {
 	}
 
 	// Método para actualizar un examen
-	async update(idExamen, changes) {
-		const examen = await this.findOne(idExamen);
-		const rta = await examen.update(changes);
-		return rta;
+	async updateExamen(idExamen, changes) {
+		const examen = await this.findOneExamen(idExamen);
+		const newExamen = await examen.update(changes);
+		return newExamen;
 	}
 
 	// Método para eliminar un examen
-	async delete(idExamen) {
+	async deleteExamen(idExamen) {
 		const examen = await models.Examen.findByPk(idExamen);
 		await examen.destroy();
 		return { idExamen };
