@@ -13,8 +13,9 @@ let transporter = nodemailer.createTransport({
 	}
 });
 
-async function sendMail(user, type) {
-	const { subject, text, html } = mailContent(type, user.name);
+async function sendMail(user, type, recoveryURL) {
+	recoveryURL = recoveryURL || '';
+	const { subject, text, html } = mailContent(type, user.name, recoveryURL);
 
 	// Enviar correo con el objeto de transporte definido
 	let info = await transporter.sendMail({
@@ -35,3 +36,5 @@ sendMail(
 	'Correo Lab',
 	'newAccount'
 );
+
+module.exports = sendMail;

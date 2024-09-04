@@ -119,7 +119,7 @@ function nuevaCuenta(name) {
 </body>`;
 }
 
-function recuperarPassword(name) {
+function recuperarPassword(name, recoveryURL) {
 	return `<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -167,7 +167,7 @@ function recuperarPassword(name) {
     <div class="content">
         <p>Estimado/a ${name},</p>
         <p>Para reestablecer su contraseña haga click en el siguiente enlace.</p>
-        <a href="#" class="button">Acceder al Portal de Pacientes</a>
+        <a href=${recoveryURL} class="button">Acceder al Portal de Pacientes</a>
     </div>
     <div class="footer">
         <p>Este es un mensaje automático, por favor no responda a este correo.</p>
@@ -176,7 +176,7 @@ function recuperarPassword(name) {
 </body>`;
 }
 
-function mailContent(type, name) {
+function mailContent(type, name, recoveryURL) {
 	const mail = {};
 
 	if (type == 'newResult') {
@@ -196,7 +196,7 @@ function mailContent(type, name) {
         Bienvenido a Lab. Clinico, nos complace informarle que su su cuenta ha sido registrada correctamente.`;
 	} else if (type == 'recovery') {
 		mail.subject = 'Recuperación de contraseña';
-		mail.html = recuperarPassword(name);
+		mail.html = recuperarPassword(name, recoveryURL);
 		mail.text = `Estimado/a ${name},
         Para reestablecer su contraseña haga click en el siguiente enlace.`;
 	}
