@@ -7,71 +7,71 @@ const nodemailer = require('nodemailer');
 const { config } = require('../config/config');
 
 // Importa el servicio de usuario
-const UserService  = require('./user.service');
+const UserService = require('./user.service');
 const service = new UserService();
 
 class AuthService {
-  // Método para obtener un usuario por email y contraseña
-  async getUser(email, password) {
-    const user = await service.findByEmail(email);
+	// Método para obtener un usuario por email y contraseña
+	async getUser(email, password) {
+		const user = await service.findByEmail(email);
 
-    // Si el usuario no existe, lanza un error de no autorizado
-    if (!user) {
-      throw boom.unauthorized();
-    }
+		// Si el usuario no existe, lanza un error de no autorizado
+		if (!user) {
+			throw boom.unauthorized();
+		}
 
-    // Compara la contraseña proporcionada con la almacenada en la base de datos
-    const isMatch = await bcrypt.compare(password, user.password);
+		// Compara la contraseña proporcionada con la almacenada en la base de datos
+		const isMatch = await bcrypt.compare(password, user.password);
 
-    // Si no hay coincidencia, lanza un error de no autorizado
-    if (!isMatch) {
-      throw boom.unauthorized();
-    }
+		// Si no hay coincidencia, lanza un error de no autorizado
+		if (!isMatch) {
+			throw boom.unauthorized();
+		}
 
-    // Elimina la contraseña del objeto de usuario antes de devolverlo
-    delete user.dataValues.password;
-    return user;
-  }
+		// Elimina la contraseña del objeto de usuario antes de devolverlo
+		delete user.dataValues.password;
+		return user;
+	}
 
-  // Método para firmar un token JWT
-  signToken(user) {
-    const payload = {
-      sub: user.id,
-      role: user.role
-    }
+	// Método para firmar un token JWT
+	signToken(user) {
+		const payload = {
+			sub: user.id,
+			role: user.role
+		};
 
-    const token = jwt.sign(payload, config.jwtsecret);
+		const token = jwt.sign(payload, config.jwtsecret);
 
-    return {
-      user,
-      token
-    };
-  }
+		return {
+			user,
+			token
+		};
+	}
 
-  // Método para enviar un correo de recuperación de contraseña
-  async sendResetPassword(email) {
-    const user = await service.findByEmail(email);
+	// Método para enviar un correo de recuperación de contraseña
+	async sendResetPassword(email) {
+		const user = await service.findByEmail(email);
 
-    // Si el usuario no existe, lanza un error de no autorizado
-    if (!user) {
-      throw boom.unauthorized();
-    }
+		// Si el usuario no existe, lanza un error de no autorizado
+		if (!user) {
+			throw boom.unauthorized();
+		}
 
-    // Genera un token de recuperación de contraseña que caduca en 15 minutos
-    const payload = {
-      sub: user.id
-    };
-    const token = jwt.sign(payload, config.jwtsecret, {expiresIn: '15min'});
-    const link = `http://myfrontend.com/recuperar?token=${token}`;
+		// Genera un token de recuperación de contraseña que caduca en 15 minutos
+		const payload = {
+			sub: user.id
+		};
+		const token = jwt.sign(payload, config.jwtsecret, { expiresIn: '15min' });
+		const link = `http://myfrontend.com/recuperar?token=${token}`;
 
-    // Actualiza el campo de recuperación de token en la base de datos
-    await service.update(user.id, {recoveryToken: token});
-    const mail = {
-      from: 'fabiolabclinico@gmail.com', // sender address
-      to: `${user.email}`, // list of receivers
-      subject: "Lab clinico - Recuperacion de contraseña", // Subject line
-      text: "Has solicitado recuperacion de contraseña, por medio de este correo podras guardar una nueva clave de acceso.", // plain text body
-      html: `<style type="text/css">
+		// Actualiza el campo de recuperación de token en la base de datos
+		await service.update(user.id, { recoveryToken: token });
+		const mail = {
+			from: 'fabiolabclinico@gmail.com', // sender address
+			to: `${user.email}`, // list of receivers
+			subject: 'Lab clinico - Recuperacion de contraseña', // Subject line
+			text: 'Has solicitado recuperacion de contraseña, por medio de este correo podras guardar una nueva clave de acceso.', // plain text body
+			html: `<style type="text/css">
       @media only screen and (min-width: 620px) {
   .u-row {
     width: 600px !important;
@@ -221,53 +221,53 @@ table, td { color: #000000; } #u_body a { color: #0000ee; text-decoration: under
       </td>
     </tr>
   </tbody>
-</table> `, // html body
-    }
-    const rta = await this.sendMail(mail);
-    return rta;
-  }
+</table> ` // html body
+		};
+		const rta = await this.sendMail(mail);
+		return rta;
+	}
 
-  // Método para cambiar la contraseña
-  async changePassword(token, newPassword) {
-    try {
-      // Verifica el token
-      const payload = jwt.verify(token, config.jwtsecret);
+	// Método para cambiar la contraseña
+	async changePassword(token, newPassword) {
+		try {
+			// Verifica el token
+			const payload = jwt.verify(token, config.jwtsecret);
 
-      // Encuentra al usuario asociado al token
-      const user = await service.findOne(payload.sub);
+			// Encuentra al usuario asociado al token
+			const user = await service.findOne(payload.sub);
 
-      // Si el token de recuperación no coincide, lanza un error de no autorizado
-      if (user.recoveryToken !== token ) {
-        throw boom.unauthorized();
-      }
+			// Si el token de recuperación no coincide, lanza un error de no autorizado
+			if (user.recoveryToken !== token) {
+				throw boom.unauthorized();
+			}
 
-      // Encripta la nueva contraseña y actualiza en la base de datos
-      const hash = await bcrypt.hash(newPassword, 777);
-      await service.update(user.id, {recoveryToken: null, password: hash});
+			// Encripta la nueva contraseña y actualiza en la base de datos
+			const hash = await bcrypt.hash(newPassword, 777);
+			await service.update(user.id, { recoveryToken: null, password: hash });
 
-      return { message: "contraseña actualizada"};
-    } catch (error) {
-        throw boom.unauthorized();
-    }
-  }
+			return { message: 'contraseña actualizada' };
+		} catch (error) {
+			throw boom.unauthorized();
+		}
+	}
 
-  // Método para enviar un correo de notificación de nuevo resultado
-  async sendNewResultado(userId) {
-    console.log(userId)
-    const user = await service.findOne(userId);
+	// Método para enviar un correo de notificación de nuevo resultado
+	async sendNewResultado(userId) {
+		console.log(userId);
+		const user = await service.findOne(userId);
 
-    // Si el usuario no existe, lanza un error de no autorizado
-    if (!user) {
-      throw boom.unauthorized();
-    }
-    const link =" http://myfrontend.com/recuperar";
-    console.log(user.email)
-    const mail = {
-      from: 'fabiolabclinico@gmail.com', // sender address
-      to: `${user.email}`, // list of receivers
-      subject: "Lab clinico - Nuevo resultado disponible", // Subject line
-      text: "Ya se encuentra disponible un nuevo resultado en Lab clinico, si desea visualizarlo puede entrar a la aplicacion.", // plain text body
-      html: `<style type="text/css">
+		// Si el usuario no existe, lanza un error de no autorizado
+		if (!user) {
+			throw boom.unauthorized();
+		}
+		const link = ' http://myfrontend.com/recuperar';
+		console.log(user.email);
+		const mail = {
+			from: 'fabiolabclinico@gmail.com', // sender address
+			to: `${user.email}`, // list of receivers
+			subject: 'Lab clinico - Nuevo resultado disponible', // Subject line
+			text: 'Ya se encuentra disponible un nuevo resultado en Lab clinico, si desea visualizarlo puede entrar a la aplicacion.', // plain text body
+			html: `<style type="text/css">
       @media only screen and (min-width: 620px) {
   .u-row {
     width: 600px !important;
@@ -417,30 +417,29 @@ table, td { color: #000000; } #u_body a { color: #0000ee; text-decoration: under
       </td>
     </tr>
   </tbody>
-</table> `, // html body
-    }
-    console.log(userId)
-    const rta = await this.sendMail(mail);
-    return rta;
-  }
+</table> ` // html body
+		};
+		console.log(userId);
+		const rta = await this.sendMail(mail);
+		return rta;
+	}
 
-  // Método para enviar un correo electrónico usando nodemailer
-  async sendMail(infomail) {
-    const transporter = nodemailer.createTransport({
-      host: "smtp.gmail.com",
-      secure: true,
-      port: 465,
-      auth: {
-          user: 'fabiolabclinico@gmail.com',
-          pass: 'lsxwsvadpfjxqjdy'
-      }
-    });
+	// Método para enviar un correo electrónico usando nodemailer
+	async sendMail(infomail) {
+		const transporter = nodemailer.createTransport({
+			host: 'smtp.gmail.com',
+			secure: true,
+			port: 465,
+			auth: {
+				user: 'fabiolabclinico@gmail.com',
+				pass: 'lsxwsvadpfjxqjdy'
+			}
+		});
 
-
-    // Envía el correo electrónico
-    await transporter.sendMail(infomail);
-    return { message: 'Correo enviado' };
-  }
+		// Envía el correo electrónico
+		await transporter.sendMail(infomail);
+		return { message: 'Correo enviado' };
+	}
 }
 
 // Exporta la clase AuthService

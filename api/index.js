@@ -1,7 +1,7 @@
 // Importa los módulos necesarios
-const express = require("express");
-const cors = require("cors");
-const routerApi =  require("./routes");
+const express = require('express');
+const cors = require('cors');
+const routerApi = require('./routes');
 
 // Importa middlewares
 const fileUpload = require('express-fileupload');
@@ -13,13 +13,15 @@ const app = express();
 const port = process.env.PORT || 3777;
 
 // Middleware para manejar la subida de archivos
-app.use(fileUpload({
-  useTempFiles: true,
-  tempFileDir: './api/uploads'
-}));
+app.use(
+	fileUpload({
+		useTempFiles: true,
+		tempFileDir: './api/uploads'
+	})
+);
 
 // Middleware para servir archivos estáticos desde la carpeta 'documents'
-app.use(express.static('documents'))
+app.use(express.static('documents'));
 
 // Middleware para parsear el cuerpo de las peticiones a JSON
 app.use(express.json());
@@ -31,20 +33,19 @@ app.use(cors());
 require('./utils/auth');
 
 // Ruta principal para verificar si el servidor está en funcionamiento
-app.get("/api", (req, res) =>{
-  res.send("Hola mi server en Express");
+app.get('/api', (req, res) => {
+	res.send('Hola mi server en Express');
 });
 
 // Ruta protegida por un middleware de autenticación (checkApiKey)
-app.get("/api/inicio", checkApiKey, (req, res) =>{
-  res.send("Inicio de Lab Clinico");
+app.get('/api/inicio', checkApiKey, (req, res) => {
+	res.send('Inicio de Lab Clinico');
 });
 
 // Configura las rutas definidas en el archivo routes.js
 routerApi(app);
 
 // Middlewares de manejo de errores
-
 
 // Comentario: Ejemplo de una ruta que maneja parámetros de consulta
 // app.get('/users', (req, res) => {
@@ -69,6 +70,6 @@ routerApi(app);
 // });
 
 // Inicia el servidor y escucha en el puerto especificado
-app.listen(port, () =>{
-  console.log("My port: " + port);
+app.listen(port, () => {
+	console.log('My port: ' + port);
 });
