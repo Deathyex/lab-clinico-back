@@ -1,6 +1,6 @@
 const nodemailer = require("nodemailer");
 const { config } = require('../config/config');
-const {htmlContent} = require('./emailTemplates');
+const {mailContent} = require('./emailTemplates');
 
 // Crear un objeto de transporte reusable usando SMTP
 let transporter = nodemailer.createTransport({
@@ -13,7 +13,8 @@ let transporter = nodemailer.createTransport({
   },
 });
 
-async function sendMail(user, subject, text, type) {
+async function sendMail(user, type) {
+  const {subject, text, html} = mailContent(type, user.name);
 
   // Enviar correo con el objeto de transporte definido
   let info = await transporter.sendMail({
@@ -21,7 +22,7 @@ async function sendMail(user, subject, text, type) {
     to: user.email, // Lista de destinatarios
     subject: subject, // Línea de asunto
     text: text, // Cuerpo del correo en texto plano
-    html: htmlContent(type, user.name) // Cuerpo del correo en HTML
+    html: html // Cuerpo del correo en HTML
   });
 
   console.log("Message sent: %s", info.messageId);

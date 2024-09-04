@@ -176,23 +176,34 @@ function recuperarPassword(name){
 </body>`
 }
 
-function htmlContent(type, name){
-    let html = ''
+function mailContent(type, name){
+    const mail = {}
 
     if(type=='newResult'){
-        html = resultadoDisponible(name) 
+        mail.subject = 'Resultado disponible'
+        mail.html = resultadoDisponible(name) 
+        mail.text = `Estimado/a ${name},
+        Nos complace informarle que sus resultados médicos ya están disponibles para su revisión.
+        Para acceder a sus resultados, por favor siga estos pasos:
+            - Inicie sesión en su cuenta del portal de pacientes
+            - Vaya a la sección "Mis Resultados"
+            - Seleccione la fecha de su última visita
+        Si tiene alguna pregunta sobre sus resultados, no dude en contactar a su médico o a nuestro equipo de atención al paciente.`
       } 
       else if(type==='newAccount'){
-        html = nuevaCuenta(name)
+        mail.subject = 'Bienvenido a Lab. Clínico'
+        mail.html = nuevaCuenta(name)
+        mail.text = `Estimado/a ${name},
+        Bienvenido a Lab. Clinico, nos complace informarle que su su cuenta ha sido registrada correctamente.`
       }
       else if(type=='recovery'){
-        html = recuperarPassword(name)
-      }
-      else{
-        html = '<p>ERROR</P>'
+        mail.subject = 'Recuperación de contraseña'
+        mail.html = recuperarPassword(name)
+        mail.text = `Estimado/a ${name},
+        Para reestablecer su contraseña haga click en el siguiente enlace.`
       }
 
-      return html
+      return mail
 }
 
-module.exports={htmlContent}
+module.exports={mailContent}
