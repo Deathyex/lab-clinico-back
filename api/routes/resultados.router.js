@@ -11,7 +11,7 @@ const { checkRoles } = require('./../middlewares/auth.handler');
 const { createResultadoSchema, updateResultadoSchema, getResultadoSchema, queryResultadoSchema } = require('./../schemas/resultado.schema');
 
 const router = express.Router(); // Creación del router
-const service =  new ResultadosService(); // Instancia del servicio de resultados
+const resultadosService =  new ResultadosService(); // Instancia del servicio de resultados
 const authService = new AuthService(); // Instancia del servicio de autenticación
 
 // Middleware para la carga de archivos
@@ -24,7 +24,7 @@ router.get("/",
   validatorHandler(queryResultadoSchema, 'query'), // Validación del query string
   async (req, res,next) =>{
     try {
-      const resultados = await service.find(req.query); // Buscar resultados con el query string
+      const resultados = await resultadosService.find(req.query); // Buscar resultados con el query string
       res.json(resultados); // Responder con los resultados encontrados
     } catch (error) {
       next(error); // Pasar el error al siguiente middleware
@@ -38,7 +38,7 @@ router.get('/list/:idPaciente',
   async (req, res, next) => {
     try {
       const { idPaciente } = req.params;
-      const resultado = await service.findByUser(idPaciente); // Buscar resultados por el ID del paciente
+      const resultado = await resultadosService.findByUser(idPaciente); // Buscar resultados por el ID del paciente
       res.json(resultado); // Responder con los resultados encontrados
     } catch (error) {
       next(error); // Pasar el error al siguiente middleware
@@ -53,7 +53,7 @@ router.post('/',
   async (req, res, next) => {
     try {
       const body = req.body;
-      const newResultado = await service.create(body); // Crear un nuevo resultado
+      const newResultado = await resultadosService.create(body); // Crear un nuevo resultado
       const email = authService.sendNewResultado(body.userId); // Enviar notificación por correo electrónico
       res.status(201).json(newResultado); // Responder con el resultado creado
     } catch (error) {
@@ -97,7 +97,7 @@ router.patch('/:idResultado',
     try {
       const { idResultado } = req.params;
       const body = req.body;
-      const resultado = await service.update(idResultado, body); // Actualizar un resultado
+      const resultado = await resultadosService.update(idResultado, body); // Actualizar un resultado
       res.json(resultado); // Responder con el resultado actualizado
     } catch (error) {
       next(error); // Pasar el error al siguiente middleware
@@ -113,7 +113,7 @@ router.delete('/:idResultado',
     try {
       console.log('aaaaa')
       const { idResultado } = req.params;
-      await service.delete(idResultado); // Eliminar un resultado
+      await resultadosService.delete(idResultado); // Eliminar un resultado
       res.status(201).json({idResultado}); // Responder con el ID del resultado eliminado
     } catch (error) {
       next(error); // Pasar el error al siguiente middleware

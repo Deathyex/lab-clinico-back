@@ -5,7 +5,7 @@ const ResultadosService = require('./../services/resultados.service');
 const { config } = require('../config/config');
 
 const router = express.Router(); // Creación del router
-const service =  new ResultadosService(); // Instancia del servicio de resultados
+const resultadosService =  new ResultadosService(); // Instancia del servicio de resultados
 
 // Ruta para obtener los resultados del usuario autenticado
 router.get('/mis-resultados',
@@ -13,7 +13,7 @@ router.get('/mis-resultados',
   async (req, res, next) => {
     try {
       const user = req.user; // Obtener el usuario autenticado del token JWT
-      const resultados = await service.findByUser(user.sub); // Buscar resultados por el ID del usuario
+      const resultados = await resultadosService.findByUser(user.sub); // Buscar resultados por el ID del usuario
       res.json(resultados); // Responder con los resultados encontrados
     } catch (error) {
       next(error); // Pasar el error al siguiente middleware
