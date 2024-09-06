@@ -15,11 +15,11 @@ const examenService = new ExamenService(); // Instancia del servicio de exámene
 
 // Ruta para obtener todos los exámenes
 router.get(
-	'/',
+	'/listAll',
 	passport.authenticate('jwt', { session: false }), // Autenticación con JWT
 	async (req, res, next) => {
 		try {
-			const resultados = await examenService.find();
+			const resultados = await examenService.findAllExamenes();
 			res.json(resultados);
 		} catch (error) {
 			next(error);
@@ -29,13 +29,13 @@ router.get(
 
 // Ruta para obtener un examen por su ID
 router.get(
-	'/:id',
+	'/list/:id',
 	passport.authenticate('jwt', { session: false }), // Autenticación con JWT
 	validatorHandler(getExamenSchema, 'params'), // Validación del parámetro 'id'
 	async (req, res, next) => {
 		try {
 			const { id } = req.params;
-			const examen = await examenService.findOne(id);
+			const examen = await examenService.findExamenById(id);
 			res.json(examen);
 		} catch (error) {
 			next(error);
@@ -45,14 +45,14 @@ router.get(
 
 // Ruta para crear un nuevo examen
 router.post(
-	'/',
+	'/create',
 	passport.authenticate('jwt', { session: false }), // Autenticación con JWT
-	checkRoles('ADMIN'), // Verificación de roles (solo para administradores)
+	checkRoles('ADMIN', 'ANALISTA'), // Verificación de roles
 	validatorHandler(createExamenSchema, 'body'), // Validación del cuerpo de la solicitud
 	async (req, res, next) => {
 		try {
 			const body = req.body;
-			const newExamen = await examenService.create(body);
+			const newExamen = await examenService.createExamen(body);
 			res.status(201).json(newExamen); // Respuesta con el examen creado
 		} catch (error) {
 			next(error);
@@ -62,16 +62,16 @@ router.post(
 
 // Ruta para actualizar un examen por su ID
 router.patch(
-	'/:id',
+	'/update/:id',
 	passport.authenticate('jwt', { session: false }), // Autenticación con JWT
-	checkRoles('ADMIN'), // Verificación de roles (solo para administradores)
+	checkRoles('ADMIN', 'ANALISTA'), // Verificación de roles
 	validatorHandler(getExamenSchema, 'params'), // Validación del parámetro 'id'
 	validatorHandler(updateExamenSchema, 'body'), // Validación del cuerpo de la solicitud
 	async (req, res, next) => {
 		try {
 			const { id } = req.params;
 			const body = req.body;
-			const examen = await examenService.update(id, body);
+			const examen = await examenService.updateExamen(id, body);
 			res.json(examen); // Respuesta con el examen actualizado
 		} catch (error) {
 			next(error);
@@ -81,14 +81,14 @@ router.patch(
 
 // Ruta para eliminar un examen por su ID
 router.delete(
-	'/:id',
+	'/delete/:id',
 	passport.authenticate('jwt', { session: false }), // Autenticación con JWT
-	checkRoles('ADMIN'), // Verificación de roles (solo para administradores)
+	checkRoles('ADMIN', 'ANALISTA'), // Verificación de roles (solo para administradores)
 	validatorHandler(getExamenSchema, 'params'), // Validación del parámetro 'id'
 	async (req, res, next) => {
 		try {
 			const { id } = req.params;
-			await examenService.delete(id);
+			await examenService.deleteExamen(id);
 			res.status(201).json({ id }); // Respuesta con el ID del examen eliminado
 		} catch (error) {
 			next(error);

@@ -1,22 +1,36 @@
 const boom = require('@hapi/boom');
-const fileUpload = require('express-fileupload');
-
-const { models } = require('../libs/sequelize');
 const { Op } = require('sequelize');
+const { models } = require('../libs/sequelize');
+const UserService = require('./user.service');
+const sendMail = require('../mailer/nodemailer');
+
+const userService = new UserService();
 
 class ResultadosService {
 	constructor() {}
 
+	// Enviar correo de nuevo resultado
+	async sendNewResultado(id) {
+		const user = await userService.findUserById(id);
+
+		// Si el usuario no existe, lanza un error de no autorizado
+		if (!user) {
+			throw boom.unauthorized();
+		}
+
+		const respuesta = await sendMail(user, 'newResult');
+		return respuesta;
+	}
+
 	// Crear resultados
-	async create(data) {
+	async createResultado(data) {
 		console.log(data);
 		const newResultado = await models.Resultado.create(data);
-		console.log('holaaaaaaaaaaaaaaaaaaaaaaa');
 		return newResultado;
 	}
 
 	// Obtener resultados
-	async find(query) {
+	async findAllResultados(query) {
 		const options = {
 			include: ['examen'],
 			where: {}
@@ -51,7 +65,7 @@ class ResultadosService {
 		return rta;
 	}
 
-	async findByUser(userId) {
+	async findResultadosByUserId(userId) {
 		const resultados = await models.Resultado.findAll({
 			where: {
 				id_paciente: userId
@@ -61,7 +75,7 @@ class ResultadosService {
 	}
 
 	// Obtener resultado especifico
-	async findOne(idResultado) {
+	async findResultadoById(idResultado) {
 		const resultado = await models.Resultado.findByPk(idResultado, {
 			include: ['examen', 'user']
 		});
