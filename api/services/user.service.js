@@ -8,14 +8,14 @@ class UserService {
 	constructor() {}
 
 	// Método para crear un nuevo usuario
-	async create(data) {
+	async createUser(data) {
 		// Hashea la contraseña antes de almacenarla
-		const hash = await bcrypt.hash(data.password, 777);
+		const hashedPassword = await bcrypt.hash(data.password, 10);
 
 		// Crea un nuevo usuario en la base de datos
 		const newUser = await models.User.create({
 			...data,
-			password: hash
+			password: hashedPassword
 		});
 
 		// Elimina la contraseña del objeto de respuesta
@@ -25,7 +25,7 @@ class UserService {
 	}
 
 	// Método para obtener todos los usuarios
-	async find() {
+	async findAllUsers() {
 		const rta = await models.User.findAll({
 			include: ['resultado']
 		});
@@ -33,7 +33,7 @@ class UserService {
 	}
 
 	// Método para encontrar un usuario por su dirección de correo electrónico
-	async findByEmail(email) {
+	async findUserByEmail(email) {
 		const rta = await models.User.findOne({
 			where: { email }
 		});
@@ -41,7 +41,7 @@ class UserService {
 	}
 
 	// Método para encontrar un usuario por su ID
-	async findOne(id) {
+	async findUserById(id) {
 		const user = await models.User.findByPk(id, {
 			include: ['resultado']
 		});
@@ -55,14 +55,14 @@ class UserService {
 	}
 
 	// Método para actualizar un usuario
-	async update(id, changes) {
+	async updateUser(id, changes) {
 		const user = await this.findOne(id);
 		const rta = await user.update(changes);
 		return rta;
 	}
 
 	// Método para eliminar un usuario
-	async delete(id) {
+	async deleteUser(id) {
 		const user = await models.User.findByPk(id);
 		await user.destroy();
 		return { id };

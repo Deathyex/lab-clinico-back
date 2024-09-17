@@ -13,7 +13,7 @@ const userService = new UserService();
 class AuthService {
 	// Método para obtener un usuario por email y contraseña
 	async login(email, userInputPassword) {
-		const user = await userService.findByEmail(email);
+		const user = await userService.findUserByEmail(email);
 
 		// Si el usuario no existe, lanza un error de no autorizado
 		if (!user) {
@@ -50,7 +50,7 @@ class AuthService {
 
 	// Método para enviar un correo de recuperación de contraseña
 	async sendResetPassword(email) {
-		const user = await userService.findByEmail(email);
+		const user = await userService.findUserByEmail(email);
 
 		// Si el usuario no existe, lanza un error de no autorizado
 		if (!user) {
@@ -65,7 +65,7 @@ class AuthService {
 		const link = `http://myfrontend.com/recuperar?token=${token}`;
 
 		// Actualiza el campo de recuperación de token en la base de datos
-		await userService.update(user.id, { recoveryToken: token });
+		await userService.updateUser(user.id, { recoveryToken: token });
 
 		const rta = await sendMail(user, 'recovery', link);
 		return rta;
@@ -78,7 +78,7 @@ class AuthService {
 			const payload = jwt.verify(token, config.jwtsecret);
 
 			// Encuentra al usuario asociado al token
-			const user = await userService.findOne(payload.sub);
+			const user = await userService.findUserById(payload.sub);
 
 			// Si el token de recuperación no coincide, lanza un error de no autorizado
 			if (user.recoveryToken !== token) {
@@ -87,7 +87,7 @@ class AuthService {
 
 			// Encripta la nueva contraseña y actualiza en la base de datos
 			const hashedPassword = await bcrypt.hash(newPassword, 10);
-			await userService.update(user.id, {
+			await userService.updateUser(user.id, {
 				recoveryToken: null,
 				password: hashedPassword
 			});

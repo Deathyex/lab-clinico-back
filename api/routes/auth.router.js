@@ -1,8 +1,6 @@
 // Importaciones de módulos y configuraciones
 const express = require('express'); // Express para construir rutas
 const passport = require('passport'); // Passport para autenticación
-const jwt = require('jsonwebtoken'); // JWT para generar tokens
-
 const AuthService = require('../services/auth.service'); // Servicio de autenticación
 
 const router = express.Router(); // Creación del router
@@ -26,15 +24,15 @@ router.post(
 router.post('/recuperacion', async (req, res, next) => {
 	try {
 		const { email } = req.body;
-		const rta = await authService.sendResetPassword(email);
-		res.json(rta); // Responder con la respuesta del servicio
+		const respuesta = await authService.sendResetPassword(email);
+		res.json(respuesta); // Responder con la respuesta del servicio
 	} catch (error) {
 		next(error); // Pasar el error al siguiente middleware
 	}
 });
 
 // Ruta de actualización de contraseña
-router.post('/actualizacion-contra', async (req, res, next) => {
+router.post('/changepassword', async (req, res, next) => {
 	try {
 		const { token, newPassword } = req.body;
 		const rta = await authService.changePassword(token, newPassword);

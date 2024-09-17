@@ -4,7 +4,6 @@ const resultadosRouter = require('./resultados.router'); // Importa el router de
 const usersRouter = require('./users.router'); // Importa el router de usuarios
 const examenesRouter = require('./examenes.router'); // Importa el router de exámenes
 const authRouter = require('./auth.router'); // Importa el router de autenticación
-const profileRouter = require('./profile.router'); // Importa el router de perfil
 
 function routerApi(app) {
 	const router = express.Router(); // Crea un nuevo router de Express
@@ -13,7 +12,6 @@ function routerApi(app) {
 	router.use('/users', usersRouter); // Usa el router de usuarios en la ruta '/users'
 	router.use('/examenes', examenesRouter); // Usa el router de exámenes en la ruta '/examenes'
 	router.use('/auth', authRouter); // Usa el router de autenticación en la ruta '/auth'
-	router.use('/perfil/', profileRouter); // Usa el router de perfil en la ruta '/perfil/'
 }
 
 module.exports = routerApi; // Exporta la función routerApi

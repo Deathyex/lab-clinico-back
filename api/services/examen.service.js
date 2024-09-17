@@ -19,7 +19,7 @@ class ExamenService {
 	}
 
 	// Método para encontrar un examen por su ID
-	async findOneExamen(idExamen) {
+	async findExamenById(idExamen) {
 		const examen = await models.Examen.findByPk(idExamen, {
 			include: ['resultado']
 		});
