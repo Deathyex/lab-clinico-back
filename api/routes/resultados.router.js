@@ -2,7 +2,6 @@ const express = require('express');
 const passport = require('passport');
 
 const ResultadosService = require('./../services/resultados.service');
-const AuthService = require('./../services/auth.service');
 
 const validatorHandler = require('../middlewares/validator.handler');
 const { checkRoles } = require('./../middlewares/roles.handler');
