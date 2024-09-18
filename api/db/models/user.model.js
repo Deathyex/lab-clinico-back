@@ -13,7 +13,12 @@ const UserSchema = {
 		unique: true,
 		primaryKey: true
 	},
-	name: {
+	firstName: {
+		allowNull: false,
+		type: DataTypes.STRING,
+		unique: false
+	},
+	lastName: {
 		allowNull: false,
 		type: DataTypes.STRING,
 		unique: false
@@ -41,17 +46,7 @@ const UserSchema = {
 	role: {
 		allowNull: false,
 		type: DataTypes.STRING,
-		defaultValue: 'paciente'
-	},
-	createdAt: {
-		allowNull: false,
-		type: DataTypes.DATE,
-		field: 'create_at',
-		defaultValue: Sequelize.NOW
-	},
-	updatedAt: {
-		type: DataTypes.DATE,
-		field: 'update_at'
+		defaultValue: 'PACIENTE'
 	}
 };
 
@@ -69,7 +64,7 @@ class User extends Model {
 			sequelize,
 			tableName: USER_TABLE,
 			modelName: 'User',
-			timestamp: false
+			paranoid: true
 		};
 	}
 }

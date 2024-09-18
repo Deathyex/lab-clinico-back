@@ -7,7 +7,7 @@ const url = Joi.string().min(3); // Define una validación para el campo "url", 
 
 const resultadoDate = Joi.date(); // Define una validación para el campo "resultadoDate", que debe ser una fecha.
 const userId = Joi.string().alphanum(); // Define una validación para el campo "userId", que debe ser una cadena alfanumérica.
-const examenId = Joi.number().integer(); // Define una validación para el campo "examenId", que debe ser un número entero.
+const examenId = Joi.string().uuid(); // Define una validación para el campo "examenId", que debe ser una cadena UUID.
 
 const resultadoDate_min = Joi.date(); // Define una validación para el campo "resultadoDate_min", que debe ser una fecha.
 const resultadoDate_max = Joi.date(); // Define una validación para el campo "resultadoDate_max", que debe ser una fecha.

@@ -1,5 +1,5 @@
 // Importación de las clases y constantes necesarias desde sequelize
-const { Model, DataTypes, Sequelize } = require('sequelize');
+const { Model, DataTypes } = require('sequelize');
 
 // Importación de las constantes relacionadas a las tablas de usuario y examen
 const { USER_TABLE } = require('./user.model');
@@ -12,8 +12,8 @@ const RESULTADO_TABLE = 'resultados';
 const ResultadoSchema = {
 	idResultado: {
 		allowNull: false,
-		type: Sequelize.UUID,
-		defaultValue: Sequelize.UUIDV4,
+		type: DataTypes.UUIDV4,
+		defaultValue: DataTypes.UUIDV4,
 		field: 'id_resultado',
 		unique: true,
 		primaryKey: true
@@ -25,7 +25,7 @@ const ResultadoSchema = {
 	},
 	resultadoDate: {
 		allowNull: false,
-		type: DataTypes.DATEONLY,
+		type: DataTypes.DATE,
 		field: 'resultado_date',
 		unique: false
 	},
@@ -56,16 +56,6 @@ const ResultadoSchema = {
 		},
 		onUpdate: 'CASCADE',
 		onDelete: 'SET NULL'
-	},
-	createdAt: {
-		allowNull: false,
-		type: DataTypes.DATE,
-		field: 'create_at',
-		defaultValue: Sequelize.NOW
-	},
-	updatedAt: {
-		type: DataTypes.DATE,
-		field: 'update_at'
 	}
 };
 
@@ -81,7 +71,7 @@ class Resultado extends Model {
 			sequelize,
 			tableName: RESULTADO_TABLE,
 			modelName: 'Resultado',
-			timestamp: false
+			paranoid: true
 		};
 	}
 }

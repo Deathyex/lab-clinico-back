@@ -13,14 +13,16 @@ const complexityOptions = {
 
 const email = Joi.string().email(); // Define una validación para el campo "email", que debe ser una dirección de correo electrónico válida.
 const id = Joi.string().alphanum(); // Define una validación para el campo "id", que debe ser una cadena alfanumérica.
-const name = Joi.string().min(8); // Define una validación para el campo "name", que debe ser una cadena de al menos 8 caracteres.
+const firstName = Joi.string().min(8); // Define una validación para el campo "firstName", que debe ser una cadena de al menos 8 caracteres.
+const lastName = Joi.string().min(8); // Define una validación para el campo "lastName", que debe ser una cadena de al menos 8 caracteres.
 const birthDate = Joi.date(); // Define una validación para el campo "birthDate", que debe ser una fecha.
 const password = passwordComplexity(complexityOptions); // Define una validación para el campo "password", utilizando las opciones de complejidad.
 const role = Joi.string().min(5); // Define una validación para el campo "role", que debe ser una cadena de al menos 5 caracteres.
 
 const createUserSchema = Joi.object({
 	id: id.required(), // Define un esquema de validación para la creación de un usuario. Requiere que "id" cumpla con la validación y sea obligatorio.
-	name: name.required(), // Requiere que "name" cumpla con la validación y sea obligatorio.
+	firstName: firstName.required(), // Requiere que "firstName" cumpla con la validación y sea obligatorio.
+	lastName: lastName.required(), // Requiere que "lastName" cumpla con la validación y sea obligatorio.
 	email: email.required(), // Requiere que "email" cumpla con la validación y sea obligatorio.
 	birthDate: birthDate.required(), // Requiere que "birthDate" cumpla con la validación y sea obligatorio.
 	password: password.required(), // Requiere que "password" cumpla con la validación y sea obligatorio.
@@ -30,7 +32,8 @@ const createUserSchema = Joi.object({
 const updateUserSchema = Joi.object({
 	email: email, // Define un esquema de validación para la actualización de un usuario. "email" no es obligatorio y debe cumplir con la validación si se proporciona.
 	id: id, // "id" no es obligatorio y debe cumplir con la validación si se proporciona.
-	name: name, // "name" no es obligatorio y debe cumplir con la validación si se proporciona.
+	firstName: firstName, // "firstName" no es obligatorio y debe cumplir con la validación si se proporciona.
+	lastName: lastName, // "lastName" no es obligatorio y debe cumplir con la validación si se proporciona.
 	email: email, // "email" no es obligatorio y debe cumplir con la validación si se proporciona.
 	birthDate: birthDate, // "birthDate" no es obligatorio y debe cumplir con la validación si se proporciona.
 	role: role // "role" no es obligatorio, pero debe cumplir con la validación si se proporciona.

@@ -1,5 +1,5 @@
 // Importación de las clases y constantes necesarias desde sequelize
-const { Model, DataTypes, Sequelize } = require('sequelize');
+const { Model, DataTypes } = require('sequelize');
 
 // Nombre de la tabla en la base de datos
 const EXAMEN_TABLE = 'examenes';
@@ -8,7 +8,8 @@ const EXAMEN_TABLE = 'examenes';
 const ExamenSchema = {
 	id: {
 		allowNull: false,
-		type: DataTypes.INTEGER,
+		type: DataTypes.UUIDV4,
+		defaultValue: DataTypes.UUIDV4,
 		field: 'id_examen',
 		unique: true,
 		primaryKey: true
@@ -18,20 +19,10 @@ const ExamenSchema = {
 		type: DataTypes.STRING,
 		unique: true
 	},
-	function_description: {
+	description: {
 		allowNull: false,
 		type: DataTypes.STRING,
 		unique: false
-	},
-	createdAt: {
-		allowNull: false,
-		type: DataTypes.DATE,
-		field: 'create_at',
-		defaultValue: Sequelize.NOW
-	},
-	updatedAt: {
-		type: DataTypes.DATE,
-		field: 'update_at'
 	}
 };
 
@@ -49,7 +40,7 @@ class Examen extends Model {
 			sequelize,
 			tableName: EXAMEN_TABLE,
 			modelName: 'Examen',
-			timestamp: false
+			paranoid: true
 		};
 	}
 }
