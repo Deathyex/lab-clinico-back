@@ -10,13 +10,13 @@ const options = {
 	secretOrKey: config.jwtsecret
 };
 
-passport.use(
-	new Strategy(options, (payload, done) => {
-		userService.findUserById(payload.sub).then(user => {
-			if (user) {
-				return done(null, user);
-			}
-			return done(null, false);
-		});
-	})
-);
+const jwtStrategy = new Strategy(options, (payload, done) => {
+	userService.findUserById(payload.sub).then(user => {
+		if (user) {
+			return done(null, user);
+		}
+		return done(null, false);
+	});
+});
+
+module.exports = jwtStrategy;

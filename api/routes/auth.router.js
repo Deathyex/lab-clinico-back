@@ -1,6 +1,7 @@
 // Importaciones de m처dulos y configuraciones
 const express = require('express'); // Express para construir rutas
 const passport = require('passport'); // Passport para autenticaci처n
+const passportLocal = require('../strategies/local.strategy'); // Passport para autenticaci처n
 const AuthService = require('../services/auth.service'); // Servicio de autenticaci처n
 
 const router = express.Router(); // Creaci처n del router
@@ -9,7 +10,7 @@ const authService = new AuthService(); // Instancia del servicio de autenticaci�
 // Ruta de inicio de sesi처n
 router.post(
 	'/login',
-	passport.authenticate('local', { session: false }),
+	passport.authenticate(passportLocal, { session: false }),
 	async (req, res, next) => {
 		try {
 			const user = req.user;

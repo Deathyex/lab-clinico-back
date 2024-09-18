@@ -1,6 +1,6 @@
 const express = require('express');
 const passport = require('passport');
-
+const jwtStrategy = require('../strategies/jwt.strategy');
 const ExamenService = require('./../services/examen.service');
 const validatorHandler = require('./../middlewares/validator.handler');
 const { checkRoles } = require('./../middlewares/roles.handler');
@@ -14,23 +14,18 @@ const router = express.Router(); // Creación del router
 const examenService = new ExamenService(); // Instancia del servicio de exámenes
 
 // Ruta para obtener todos los exámenes
-router.get(
-	'/listAll',
-	passport.authenticate('jwt', { session: false }), // Autenticación con JWT
-	async (req, res, next) => {
-		try {
-			const resultados = await examenService.findAllExamenes();
-			res.json(resultados);
-		} catch (error) {
-			next(error);
-		}
+router.get('/listAll', async (req, res, next) => {
+	try {
+		const resultados = await examenService.findAllExamenes();
+		res.json(resultados);
+	} catch (error) {
+		next(error);
 	}
-);
+});
 
 // Ruta para obtener un examen por su ID
 router.get(
 	'/list/:id',
-	passport.authenticate('jwt', { session: false }), // Autenticación con JWT
 	validatorHandler(getExamenSchema, 'params'), // Validación del parámetro 'id'
 	async (req, res, next) => {
 		try {
@@ -46,7 +41,7 @@ router.get(
 // Ruta para crear un nuevo examen
 router.post(
 	'/create',
-	passport.authenticate('jwt', { session: false }), // Autenticación con JWT
+	passport.authenticate(jwtStrategy, { session: false }), // Autenticación con JWT
 	checkRoles('ADMIN', 'ANALISTA'), // Verificación de roles
 	validatorHandler(createExamenSchema, 'body'), // Validación del cuerpo de la solicitud
 	async (req, res, next) => {
@@ -63,7 +58,7 @@ router.post(
 // Ruta para actualizar un examen por su ID
 router.patch(
 	'/update/:id',
-	passport.authenticate('jwt', { session: false }), // Autenticación con JWT
+	passport.authenticate(jwtStrategy, { session: false }), // Autenticación con JWT
 	checkRoles('ADMIN', 'ANALISTA'), // Verificación de roles
 	validatorHandler(getExamenSchema, 'params'), // Validación del parámetro 'id'
 	validatorHandler(updateExamenSchema, 'body'), // Validación del cuerpo de la solicitud
@@ -82,7 +77,7 @@ router.patch(
 // Ruta para eliminar un examen por su ID
 router.delete(
 	'/delete/:id',
-	passport.authenticate('jwt', { session: false }), // Autenticación con JWT
+	passport.authenticate(jwtStrategy, { session: false }), // Autenticación con JWT
 	checkRoles('ADMIN', 'ANALISTA'), // Verificación de roles (solo para administradores)
 	validatorHandler(getExamenSchema, 'params'), // Validación del parámetro 'id'
 	async (req, res, next) => {

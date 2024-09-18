@@ -40,7 +40,7 @@ class AuthService {
 			role: user.role
 		};
 
-		const token = jwt.sign(payload, config.jwtsecret);
+		const token = jwt.sign(payload, config.jwtsecret, { expiresIn: '30m' });
 
 		return {
 			user,

@@ -1,8 +1,7 @@
 const express = require('express');
 const passport = require('passport');
-
+const jwtStrategy = require('../strategies/jwt.strategy');
 const ResultadosService = require('./../services/resultados.service');
-
 const validatorHandler = require('../middlewares/validator.handler');
 const { checkRoles } = require('./../middlewares/roles.handler');
 const {
@@ -21,7 +20,7 @@ const resultadosService = new ResultadosService(); // Instancia del servicio de 
 // Ruta para obtener todos los resultados (con validaciones de rol y esquema de consulta)
 router.get(
 	'/listAll',
-	passport.authenticate('jwt', { session: false }), // Autenticación con JWT
+	passport.authenticate(jwtStrategy, { session: false }), // Autenticación con JWT
 	checkRoles('ADMIN', 'ANALISTA'), // Verificación de roles permitidos
 	validatorHandler(queryResultadoSchema, 'query'), // Validación del query string
 	async (req, res, next) => {
@@ -37,7 +36,7 @@ router.get(
 // Ruta para obtener los resultados de un paciente por su ID
 router.get(
 	'/list/:idPaciente',
-	passport.authenticate('jwt', { session: false }), // Autenticación con JWT
+	passport.authenticate(jwtStrategy, { session: false }), // Autenticación con JWT
 	checkRoles('ADMIN', 'ANALISTA', 'PACIENTE'), // Verificación de roles permitidos
 	async (req, res, next) => {
 		try {
@@ -55,7 +54,7 @@ router.get(
 // Ruta para crear un nuevo resultado
 router.post(
 	'/create',
-	passport.authenticate('jwt', { session: false }), // Autenticación con JWT
+	passport.authenticate(jwtStrategy, { session: false }), // Autenticación con JWT
 	checkRoles('ADMIN', 'ANALISTA', 'PACIENTE'), // Verificación de roles permitidos
 	validatorHandler(createResultadoSchema, 'body'), // Validación del cuerpo de la solicitud
 	async (req, res, next) => {
@@ -73,7 +72,7 @@ router.post(
 // Ruta para actualizar un resultado
 router.patch(
 	'/update/:idResultado',
-	passport.authenticate('jwt', { session: false }), // Autenticación con JWT
+	passport.authenticate(jwtStrategy, { session: false }), // Autenticación con JWT
 	checkRoles('ADMIN', 'ANALISTA'), // Verificación de roles permitidos
 	validatorHandler(getResultadoSchema, 'params'), // Validación de los parámetros de la solicitud
 	validatorHandler(updateResultadoSchema, 'body'), // Validación del cuerpo de la solicitud
@@ -92,7 +91,7 @@ router.patch(
 // Ruta para eliminar un resultado
 router.delete(
 	'/delete/:idResultado',
-	passport.authenticate('jwt', { session: false }), // Autenticación con JWT
+	passport.authenticate(jwtStrategy, { session: false }), // Autenticación con JWT
 	checkRoles('ADMIN', 'ANALISTA'), // Verificación de roles permitidos
 	validatorHandler(getResultadoSchema, 'params'), // Validación de los parámetros de la solicitud
 	async (req, res, next) => {
