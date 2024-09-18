@@ -12,8 +12,8 @@ function setupModels(sequelize) {
 	// Esta función se registra con el método beforeValidate de Sequelize para que se ejecute antes de la validación del modelo
 	User.beforeValidate((user, opciones) => {
 		// Esta línea toma el valor de user.name y lo convierte a mayúsculas
-		user.name = user.firstName.toUpperCase();
-		user.name = user.lastName.toUpperCase();
+		user.firstName = user.firstName.toUpperCase();
+		user.lastName = user.lastName.toUpperCase();
 		user.role = user.role.toUpperCase();
 	});
 
