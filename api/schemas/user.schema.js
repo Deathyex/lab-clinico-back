@@ -13,8 +13,8 @@ const complexityOptions = {
 
 const email = Joi.string().email(); // Define una validación para el campo "email", que debe ser una dirección de correo electrónico válida.
 const id = Joi.string().alphanum(); // Define una validación para el campo "id", que debe ser una cadena alfanumérica.
-const firstName = Joi.string().min(8); // Define una validación para el campo "firstName", que debe ser una cadena de al menos 8 caracteres.
-const lastName = Joi.string().min(8); // Define una validación para el campo "lastName", que debe ser una cadena de al menos 8 caracteres.
+const firstName = Joi.string().min(3); // Define una validación para el campo "firstName", que debe ser una cadena de al menos 8 caracteres.
+const lastName = Joi.string().min(3); // Define una validación para el campo "lastName", que debe ser una cadena de al menos 8 caracteres.
 const birthDate = Joi.date(); // Define una validación para el campo "birthDate", que debe ser una fecha.
 const password = passwordComplexity(complexityOptions); // Define una validación para el campo "password", utilizando las opciones de complejidad.
 const role = Joi.string().min(5); // Define una validación para el campo "role", que debe ser una cadena de al menos 5 caracteres.

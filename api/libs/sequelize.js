@@ -32,7 +32,7 @@ setupModels(sequelize);
 
 async function synchronize() {
 	await sequelize
-		.sync({ force: true })
+		.sync()
 		.then(console.log('All models were synchronized successfully.'));
 }
 synchronize();

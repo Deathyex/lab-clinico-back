@@ -3,7 +3,7 @@ const passport = require('passport');
 
 const ExamenService = require('./../services/examen.service');
 const validatorHandler = require('./../middlewares/validator.handler');
-const { checkRoles } = require('./../middlewares/auth.handler');
+const { checkRoles } = require('./../middlewares/roles.handler');
 const {
 	updateExamenSchema,
 	createExamenSchema,

@@ -12,7 +12,7 @@ const RESULTADO_TABLE = 'resultados';
 const ResultadoSchema = {
 	idResultado: {
 		allowNull: false,
-		type: DataTypes.UUIDV4,
+		type: DataTypes.UUID,
 		defaultValue: DataTypes.UUIDV4,
 		field: 'id_resultado',
 		unique: true,
@@ -48,7 +48,7 @@ const ResultadoSchema = {
 	},
 	examenId: {
 		allowNull: false,
-		type: DataTypes.INTEGER,
+		type: DataTypes.UUID,
 		field: 'id_examen',
 		references: {
 			model: EXAMEN_TABLE,

@@ -8,7 +8,7 @@ const EXAMEN_TABLE = 'examenes';
 const ExamenSchema = {
 	id: {
 		allowNull: false,
-		type: DataTypes.UUIDV4,
+		type: DataTypes.UUID,
 		defaultValue: DataTypes.UUIDV4,
 		field: 'id_examen',
 		unique: true,
