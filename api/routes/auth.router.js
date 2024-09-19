@@ -14,7 +14,13 @@ router.post(
 	async (req, res, next) => {
 		try {
 			const user = req.user;
-			res.json(authService.signToken(user)); // Responder con un token JWT
+			if (user) {
+				res.json(authService.signToken(user)); // Responder con un token JWT
+			} else {
+				res
+					.status(401)
+					.json({ status: 'Error', message: 'Los datos son incorrectos' });
+			}
 		} catch (error) {
 			next(error); // Pasar el error al siguiente middleware
 		}

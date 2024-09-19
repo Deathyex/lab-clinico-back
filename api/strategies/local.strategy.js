@@ -12,7 +12,11 @@ const passportLocal = new Strategy(
 	async (email, password, done) => {
 		try {
 			const user = await authService.login(email, password);
-			done(null, user);
+			if (user) {
+				done(null, user);
+			} else {
+				done(null, false);
+			}
 		} catch (error) {
 			done(error, false);
 		}
