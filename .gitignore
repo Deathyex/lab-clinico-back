@@ -191,3 +191,4 @@ postgres_data
 mysql_data
 uploads
 documents
+.env
