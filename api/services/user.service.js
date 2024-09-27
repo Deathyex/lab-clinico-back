@@ -7,6 +7,13 @@ const { models } = require('./../libs/sequelize');
 class UserService {
 	constructor() {}
 
+	// Método para obtener el primer nombre y apellido del user
+	async getShortNameFromId(id) {
+		const { firstName, lastName } = await this.findUserById(id);
+		const shortName = `${firstName.split(' ')[0]} ${lastName.split(' ')[0]}`;
+		return shortName;
+	}
+
 	// Método para crear un nuevo usuario
 	async createUser(data) {
 		// Hashea la contraseña antes de almacenarla

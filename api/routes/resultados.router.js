@@ -10,9 +10,17 @@ const {
 	getResultadoSchema,
 	queryResultadoSchema
 } = require('./../schemas/resultado.schema');
+const UploadFileService = require('../services/uploadFile.service');
+const multer = require('multer');
+const UserService = require('../services/user.service');
+const ExamenService = require('../services/examen.service');
 
+const upload = multer();
 const router = express.Router(); // Creación del router
 const resultadosService = new ResultadosService(); // Instancia del servicio de resultados
+const fileService = new UploadFileService(); // Instancia del servicio de archivos
+const userService = new UserService(); // Instancia del servicio de usuarios
+const examenService = new ExamenService(); // Instancia del servicio de examenes
 
 // Middleware para la carga de archivos
 //router.use(fileUpload());
@@ -55,19 +63,46 @@ router.get(
 router.post(
 	'/create',
 	passport.authenticate(jwtStrategy, { session: false }), // Autenticación con JWT
-	checkRoles('ADMIN', 'ANALISTA', 'PACIENTE'), // Verificación de roles permitidos
+	checkRoles('ADMIN', 'ANALISTA'), // Verificación de roles permitidos
 	validatorHandler(createResultadoSchema, 'body'), // Validación del cuerpo de la solicitud
+	upload.single('file'), // Middleware para procesar el archivo subido
 	async (req, res, next) => {
 		try {
-			const body = req.body;
-			const newResultado = await resultadosService.createResultado(body); // Crear un nuevo resultado
+			const shortName = await userService.getShortNameFromId(req.body.userId);
+			const examen = await examenService.findExamenById(req.body.examenId);
+			const { buffer } = req.file;
+			const uploadedFile = await fileService.uploadFile(
+				shortName,
+				examen.name,
+				buffer
+			);
+			req.body.url = uploadedFile.url; // Asigna la url del archivo al cuerpo de la request
+			const newResultado = await resultadosService.createResultado(req.body); // Crear un nuevo resultado
 			resultadosService.sendNewResultado(body.userId); // Enviar notificación por correo electrónico
 			res.status(201).json(newResultado); // Responder con el resultado creado
 		} catch (error) {
-			next(error); // Pasar el error al siguiente middleware
+			res.status(500).json({ message: error.message });
 		}
 	}
 );
+
+// Ruta para probar la subida de archivos
+
+router.post('/upload', upload.single('file'), async (req, res, next) => {
+	const shortName = await userService.getShortNameFromId(req.body.userId);
+	const examen = await examenService.findExamenById(req.body.examenId);
+	const { buffer } = req.file;
+	try {
+		const uploadedFile = await fileService.uploadFile(
+			shortName,
+			examen.name,
+			buffer
+		);
+		res.status(201).json(uploadedFile);
+	} catch (error) {
+		res.status(500).json({ message: error.message });
+	}
+});
 
 // Ruta para actualizar un resultado
 router.patch(

@@ -13,6 +13,7 @@ const config = {
 	emailUser: process.env.EMAIL_USER,
 	emailPass: process.env.EMAIL_PASS,
 	sasToken: process.env.SAS_TOKEN,
+	connectionString: process.env.AZURE_STORAGE_CONNECTION_STRING,
 	accountName: process.env.ACCOUNT_NAME,
 	containerName: process.env.CONTAINER_NAME
 };
