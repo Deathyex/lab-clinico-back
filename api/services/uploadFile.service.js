@@ -9,14 +9,14 @@ class UploadFileService {
 	constructor() {}
 
 	async uploadFile(userName, tipoExamen, buffer) {
-		const fileName = `${userName}_${tipoExamen}_${Date.now()}.pdf`.replace(
+		const fileName = `${userName}_${tipoExamen}_${Date.now()}`.replaceAll(
 			' ',
 			'-'
 		);
 		const containerClient =
 			blobServiceClient.getContainerClient('results-documents');
 		const blobResponse = await containerClient
-			.getBlockBlobClient(fileName)
+			.getBlockBlobClient(fileName + '.pdf')
 			.uploadData(buffer);
 
 		return { fileName, url: blobResponse._response.request.url };

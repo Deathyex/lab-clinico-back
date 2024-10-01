@@ -64,21 +64,29 @@ router.post(
 	'/create',
 	passport.authenticate(jwtStrategy, { session: false }), // Autenticación con JWT
 	checkRoles('ADMIN', 'ANALISTA'), // Verificación de roles permitidos
-	validatorHandler(createResultadoSchema, 'body'), // Validación del cuerpo de la solicitud
 	upload.single('file'), // Middleware para procesar el archivo subido
 	async (req, res, next) => {
+		console.log(req.body);
+
 		try {
-			const shortName = await userService.getShortNameFromId(req.body.userId);
-			const examen = await examenService.findExamenById(req.body.examenId);
+			const { resultadoDate, userId, examenId } = req.body;
+			const shortName = await userService.getShortNameFromId(userId);
+			const examen = await examenService.findExamenById(examenId);
 			const { buffer } = req.file;
 			const uploadedFile = await fileService.uploadFile(
 				shortName,
 				examen.name,
 				buffer
 			);
-			req.body.url = uploadedFile.url; // Asigna la url del archivo al cuerpo de la request
-			const newResultado = await resultadosService.createResultado(req.body); // Crear un nuevo resultado
-			resultadosService.sendNewResultado(body.userId); // Enviar notificación por correo electrónico
+			const body = {
+				name: uploadedFile.fileName,
+				resultadoDate: resultadoDate,
+				userId: userId,
+				examenId: examenId,
+				url: uploadedFile.url
+			};
+			const newResultado = await resultadosService.createResultado(body); // Crear un nuevo resultado
+			resultadosService.sendNewResultado(userId); // Enviar notificación por correo electrónico
 			res.status(201).json(newResultado); // Responder con el resultado creado
 		} catch (error) {
 			res.status(500).json({ message: error.message });
