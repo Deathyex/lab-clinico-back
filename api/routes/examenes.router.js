@@ -41,8 +41,8 @@ router.get(
 // Ruta para crear un nuevo examen
 router.post(
 	'/create',
-	passport.authenticate(jwtStrategy, { session: false }), // Autenticación con JWT
-	checkRoles('ADMIN', 'ANALISTA'), // Verificación de roles
+	//passport.authenticate(jwtStrategy, { session: false }), // Autenticación con JWT
+	//checkRoles('ADMIN', 'ANALISTA'), // Verificación de roles
 	validatorHandler(createExamenSchema, 'body'), // Validación del cuerpo de la solicitud
 	async (req, res, next) => {
 		try {
@@ -58,8 +58,8 @@ router.post(
 // Ruta para actualizar un examen por su ID
 router.patch(
 	'/update/:id',
-	passport.authenticate(jwtStrategy, { session: false }), // Autenticación con JWT
-	checkRoles('ADMIN', 'ANALISTA'), // Verificación de roles
+	//passport.authenticate(jwtStrategy, { session: false }), // Autenticación con JWT
+	//checkRoles('ADMIN', 'ANALISTA'), // Verificación de roles
 	validatorHandler(getExamenSchema, 'params'), // Validación del parámetro 'id'
 	validatorHandler(updateExamenSchema, 'body'), // Validación del cuerpo de la solicitud
 	async (req, res, next) => {
@@ -77,8 +77,8 @@ router.patch(
 // Ruta para eliminar un examen por su ID
 router.delete(
 	'/delete/:id',
-	passport.authenticate(jwtStrategy, { session: false }), // Autenticación con JWT
-	checkRoles('ADMIN', 'ANALISTA'), // Verificación de roles (solo para administradores)
+	//passport.authenticate(jwtStrategy, { session: false }), // Autenticación con JWT
+	//checkRoles('ADMIN', 'ANALISTA'), // Verificación de roles (solo para administradores)
 	validatorHandler(getExamenSchema, 'params'), // Validación del parámetro 'id'
 	async (req, res, next) => {
 		try {

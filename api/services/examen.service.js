@@ -4,7 +4,7 @@ const boom = require('@hapi/boom');
 const { models } = require('../libs/sequelize');
 
 class ExamenService {
-	constructor() {}
+	constructor() { }
 
 	// Método para crear un nuevo examen
 	async createExamen(data) {
@@ -39,7 +39,7 @@ class ExamenService {
 
 	// Método para actualizar un examen
 	async updateExamen(idExamen, changes) {
-		const examen = await this.findOneExamen(idExamen);
+		const examen = await this.findExamenById(idExamen);
 		const newExamen = await examen.update(changes);
 		return newExamen;
 	}

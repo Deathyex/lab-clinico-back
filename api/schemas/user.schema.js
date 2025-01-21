@@ -30,7 +30,6 @@ const createUserSchema = Joi.object({
 });
 
 const updateUserSchema = Joi.object({
-	email: email, // Define un esquema de validación para la actualización de un usuario. "email" no es obligatorio y debe cumplir con la validación si se proporciona.
 	id: id, // "id" no es obligatorio y debe cumplir con la validación si se proporciona.
 	firstName: firstName, // "firstName" no es obligatorio y debe cumplir con la validación si se proporciona.
 	lastName: lastName, // "lastName" no es obligatorio y debe cumplir con la validación si se proporciona.
