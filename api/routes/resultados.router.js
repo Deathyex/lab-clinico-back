@@ -67,7 +67,8 @@ router.post(
 	upload.single('file'), // Middleware para procesar el archivo subido
 	async (req, res, next) => {
 		try {
-			const { resultadoDate, userId, examenId } = req.body;
+			const { userId, examenId } = req.body;
+			const resultadoDate = Date.now().toLocaleString();
 			const shortName = await userService.getShortNameFromId(userId);
 			const examen = await examenService.findExamenById(examenId);
 			const { buffer } = req.file;
