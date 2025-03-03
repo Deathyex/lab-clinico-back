@@ -44,8 +44,8 @@ router.get(
 // Ruta para obtener los resultados de un paciente por su ID
 router.get(
 	'/list/:idPaciente',
-	passport.authenticate(jwtStrategy, { session: false }), // Autenticación con JWT
-	checkRoles('ADMIN', 'ANALISTA', 'PACIENTE'), // Verificación de roles permitidos
+	//passport.authenticate(jwtStrategy, { session: false }), // Autenticación con JWT
+	//checkRoles('ADMIN', 'ANALISTA', 'PACIENTE'), // Verificación de roles permitidos
 	async (req, res, next) => {
 		try {
 			const { idPaciente } = req.params;
@@ -68,7 +68,7 @@ router.post(
 	async (req, res, next) => {
 		try {
 			const { userId, examenId } = req.body;
-			const resultadoDate = Date.now().toLocaleString();
+			const resultadoDate = new Date;
 			const shortName = await userService.getShortNameFromId(userId);
 			const examen = await examenService.findExamenById(examenId);
 			const { buffer } = req.file;

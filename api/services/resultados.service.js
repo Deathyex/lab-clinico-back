@@ -7,7 +7,7 @@ const sendMail = require('../mailer/nodemailer');
 const userService = new UserService();
 
 class ResultadosService {
-	constructor() {}
+	constructor() { }
 
 	// Enviar correo de nuevo resultado
 	async sendNewResultado(id) {
@@ -24,7 +24,7 @@ class ResultadosService {
 
 	// Crear resultados
 	async createResultado(data) {
-		console.log(data);
+		console.log('Data: ', data);
 		const newResultado = await models.Resultado.create(data);
 		return newResultado;
 	}
