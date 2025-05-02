@@ -16,7 +16,7 @@ const limit = Joi.number().integer(); // Define una validación para el campo "l
 const offset = Joi.number().integer(); // Define una validación para el campo "offset", que debe ser un número entero.
 
 const createResultadoSchema = Joi.object({
-	resultadoDate: resultadoDate.required(), // Define un esquema de validación para la creación de un resultado. Requiere que "resultadoDate" cumpla con la validación y sea obligatorio.
+	resultadoDate: resultadoDate, // Define un esquema de validación para la creación de un resultado. Requiere que "resultadoDate" cumpla con la validación y sea obligatorio.
 	userId: userId.required(), // Requiere que "userId" cumpla con la validación y sea obligatorio.
 	examenId: examenId.required() // Requiere que "examenId" cumpla con la validación y sea obligatorio.
 });

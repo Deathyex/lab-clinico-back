@@ -28,8 +28,8 @@ const examenService = new ExamenService(); // Instancia del servicio de examenes
 // Ruta para obtener todos los resultados (con validaciones de rol y esquema de consulta)
 router.get(
 	'/listAll',
-	passport.authenticate(jwtStrategy, { session: false }), // Autenticación con JWT
-	checkRoles('ADMIN', 'ANALISTA'), // Verificación de roles permitidos
+	//passport.authenticate(jwtStrategy, { session: false }), // Autenticación con JWT
+	//checkRoles('ADMIN', 'ANALISTA'), // Verificación de roles permitidos
 	validatorHandler(queryResultadoSchema, 'query'), // Validación del query string
 	async (req, res, next) => {
 		try {
@@ -44,8 +44,8 @@ router.get(
 // Ruta para obtener los resultados de un paciente por su ID
 router.get(
 	'/list/:idPaciente',
-	passport.authenticate(jwtStrategy, { session: false }), // Autenticación con JWT
-	checkRoles('ADMIN', 'ANALISTA', 'PACIENTE'), // Verificación de roles permitidos
+	//passport.authenticate(jwtStrategy, { session: false }), // Autenticación con JWT
+	//checkRoles('ADMIN', 'ANALISTA', 'PACIENTE'), // Verificación de roles permitidos
 	async (req, res, next) => {
 		try {
 			const { idPaciente } = req.params;
@@ -62,14 +62,13 @@ router.get(
 // Ruta para crear un nuevo resultado
 router.post(
 	'/create',
-	passport.authenticate(jwtStrategy, { session: false }), // Autenticación con JWT
-	checkRoles('ADMIN', 'ANALISTA'), // Verificación de roles permitidos
+	//passport.authenticate(jwtStrategy, { session: false }), // Autenticación con JWT
+	//checkRoles('ADMIN', 'ANALISTA'), // Verificación de roles permitidos
 	upload.single('file'), // Middleware para procesar el archivo subido
 	async (req, res, next) => {
-		console.log(req.body);
-
 		try {
-			const { resultadoDate, userId, examenId } = req.body;
+			const { userId, examenId } = req.body;
+			const resultadoDate = new Date;
 			const shortName = await userService.getShortNameFromId(userId);
 			const examen = await examenService.findExamenById(examenId);
 			const { buffer } = req.file;
