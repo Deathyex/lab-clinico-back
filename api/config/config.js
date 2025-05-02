@@ -12,7 +12,8 @@ const config = {
 	jwtsecret: process.env.JWT_SECRET,
 	emailUser: process.env.EMAIL_USER,
 	emailPass: process.env.EMAIL_PASS,
-	connectionString: process.env.AZURE_STORAGE_CONNECTION_STRING
+	connectionString: process.env.AZURE_STORAGE_CONNECTION_STRING,
+	frontLink: process.env.FRONT_LINK
 };
 
 module.exports = { config };

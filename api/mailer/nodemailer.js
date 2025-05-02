@@ -4,9 +4,7 @@ const { mailContent } = require('./emailTemplates');
 
 // Crear un objeto de transporte reusable usando SMTP
 let transporter = nodemailer.createTransport({
-	host: 'smtp.office365.com',
-	port: 587,
-	secure: false, // true para puerto 465, false para otros puertos
+	service: 'gmail',
 	auth: {
 		user: config.emailUser,
 		pass: config.emailPass
@@ -16,11 +14,15 @@ let transporter = nodemailer.createTransport({
 async function sendMail(user, type, recoveryURL) {
 	try {
 		recoveryURL = recoveryURL || '';
-		const { subject, text, html } = mailContent(type, user.name, recoveryURL);
+		const { subject, text, html } = mailContent(
+			type,
+			user.firstName,
+			recoveryURL
+		);
 
 		// Enviar correo con el objeto de transporte definido
 		let info = await transporter.sendMail({
-			from: '"Laboratorio Clínico" <aplicativolabclinico@outlook.com>', // Dirección del remitente
+			from: `"Laboratorio Clínico" <${config.emailUser}>`, // Dirección del remitente
 			to: user.email, // Lista de destinatarios
 			subject: subject, // Línea de asunto
 			text: text, // Cuerpo del correo en texto plano
@@ -36,9 +38,7 @@ async function sendMail(user, type, recoveryURL) {
 
 // Ejemplo de uso
 /* sendMail(
-	{ name: 'Santiago', email: 'santiagoari0209@gmail.com' },
-	'Prueba html',
-	'Correo Lab',
+	{ firstName: 'Santiago', email: 'nihide8755@nutrv.com' },
 	'newAccount'
 ); */
 

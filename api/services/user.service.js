@@ -1,5 +1,6 @@
 const boom = require('@hapi/boom');
 const bcrypt = require('bcrypt');
+const sendMail = require('../mailer/nodemailer');
 
 // Importa los modelos de la base de datos
 const { models } = require('./../libs/sequelize');
@@ -28,6 +29,8 @@ class UserService {
 		// Elimina la contraseña del objeto de respuesta
 		delete newUser.dataValues.password;
 
+		sendMail(newUser, 'newAccount');
+
 		return newUser;
 	}
 
@@ -41,7 +44,7 @@ class UserService {
 
 	// Método para encontrar un usuario por su dirección de correo electrónico
 	async findUserByEmail(email) {
-		const rta = await models.User.findOne({
+		const rta = await models.User.findUserById({
 			where: { email }
 		});
 		return rta;
@@ -63,7 +66,7 @@ class UserService {
 
 	// Método para actualizar un usuario
 	async updateUser(id, changes) {
-		const user = await this.findOne(id);
+		const user = await this.findUserById(id);
 		const rta = await user.update(changes);
 		return rta;
 	}

@@ -62,7 +62,7 @@ class AuthService {
 			sub: user.id
 		};
 		const token = jwt.sign(payload, config.jwtsecret, { expiresIn: '15min' });
-		const link = `http://myfrontend.com/recuperar?token=${token}`;
+		const link = `${config.frontLink}/recuperar?token=${token}`;
 
 		// Actualiza el campo de recuperación de token en la base de datos
 		await userService.updateUser(user.id, { recoveryToken: token });

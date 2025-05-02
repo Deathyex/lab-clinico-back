@@ -1,3 +1,5 @@
+const { config } = require('../config/config');
+
 function resultadoDisponible(name) {
 	return `<head>
     <meta charset="UTF-8">
@@ -53,11 +55,11 @@ function resultadoDisponible(name) {
             <li>Seleccione la fecha de su última visita</li>
         </ol>
         <p>Si tiene alguna pregunta sobre sus resultados, no dude en contactar a su médico o a nuestro equipo de atención al paciente.</p>
-        <a href="#" class="button">Acceder al Portal de Pacientes</a>
+        <a href="${config.frontLink}" class="button">Acceder al Portal de Pacientes</a>
     </div>
     <div class="footer">
-        <p>Este es un mensaje automático, por favor no responda a este correo.</p>
-        <p>© 2023 Clínica Médica. Todos los derechos reservados.</p>
+        <p>Este es un mensaje de prueba y automático, por favor no responda a este correo.</p>
+        <p>© 2025 App Lab. Clínico</p>
     </div>
 </body>`;
 }
@@ -110,11 +112,11 @@ function nuevaCuenta(name) {
     <div class="content">
         <p>Estimado/a ${name},</p>
         <p>Bienvenido a Lab. Clinico, nos complace informarle que su su cuenta ha sido registrada correctamente. Para ingresar a la plataforma puede usar el siguiente enlace:</p>
-        <a href="#" class="button">Acceder al Portal de Pacientes</a>
+        <a href="${config.frontLink}" class="button">Acceder al Portal de Pacientes</a>
     </div>
     <div class="footer">
-        <p>Este es un mensaje automático, por favor no responda a este correo.</p>
-        <p>© 2023 Clínica Médica. Todos los derechos reservados.</p>
+        <p>Este es un mensaje de prueba y automático, por favor no responda a este correo.</p>
+        <p>© 2025 App Lab. Clínico</p>
     </div>
 </body>`;
 }
@@ -170,8 +172,8 @@ function recuperarPassword(name, recoveryURL) {
         <a href=${recoveryURL} class="button">Acceder al Portal de Pacientes</a>
     </div>
     <div class="footer">
-        <p>Este es un mensaje automático, por favor no responda a este correo.</p>
-        <p>© 2023 Clínica Médica. Todos los derechos reservados.</p>
+        <p>Este es un mensaje de prueba y automático, por favor no responda a este correo.</p>
+        <p>© 2025 App Lab. Clínico</p>
     </div>
 </body>`;
 }
